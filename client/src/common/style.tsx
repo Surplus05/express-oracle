@@ -8,15 +8,22 @@ const GlobalStyle = createGlobalStyle`body {
   --color--black: #111;
   --color--white: #ddd;
   --color--gray--foucs:#333333;
-  --color--gray--middle: #555555;
+  --color--gray--middle: #55555555;
   --color--gray-outFoucs:#BFBFBF;
   --color--background:#F5F6F7;
+  --color--transparent: #141414bf;
 
   background-color: var(--color--background);
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   box-sizing: border-box;
   font-family: 'KoPubWorldDotum';
+
+  .focusIn {
+    border: 1px solid var(--color--main);
+  }
+
 }
 `;
 export default GlobalStyle;
@@ -33,4 +40,60 @@ export const StyledInnerLayoutWrapper = styled.div<InnerLayoutProps>`
   margin: 0 1em;
   width: 100%;
   height: 100%;
+`;
+
+export const StyledModalWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0.75em;
+  height: calc(100% - 4.55em);
+  width: calc(100% - 1.5em);
+  overflow: hidden;
+`;
+
+export const StyledSpanText = styled.span`
+  user-select: none;
+`;
+
+export const StyledModalInputWrapper = styled.div`
+  border: 1px solid var(--color--gray-outFoucs);
+  padding: 0.25em;
+  box-sizing: border-box;
+  width: 100%;
+  transition: 0.3s;
+  margin-bottom: 1em;
+`;
+
+export const StyledModalInput = styled.input`
+  width: 100%;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  :disabled {
+    background-color: transparent;
+  }
+`;
+
+export const StyledSignInButton = styled.button`
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  background: var(--color--main);
+  border: none;
+  color: #fff;
+  width: 100%;
+  height: 2.5em;
+  margin-top: 2em;
+  border-radius: var(--border--radius);
+  :disabled {
+    background-color: var(--color--gray--middle);
+  }
 `;

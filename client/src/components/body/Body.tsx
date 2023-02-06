@@ -19,7 +19,7 @@ const StyledBodyCommonAdsWrapper = styled.div`
   top: 4.5em;
   width: 12em;
   height: 24em;
-  margin: 1em 1em 1em 0;
+  margin: 1em 0 1em 1em;
   background-color: #fff;
   box-shadow: 0 0 0.375em var(--color--shadow);
   @media screen and (max-width: 768px) {
@@ -34,8 +34,8 @@ const Body = () => {
         style={{ paddingTop: "3.5em" }}
         alignItems="flex-start"
       >
-        <StyledBodyCommonAdsWrapper>광고</StyledBodyCommonAdsWrapper>
         <Outlet></Outlet>
+        <StyledBodyCommonAdsWrapper>광고</StyledBodyCommonAdsWrapper>
       </StyledInnerLayoutWrapper>
     </StyledBodyWrapper>
   );

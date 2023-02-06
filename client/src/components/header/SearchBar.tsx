@@ -12,6 +12,9 @@ const StyledSearchBarWrapper = styled.div`
   max-width: 30em;
   border-radius: 2em;
   margin: 0 1em;
+  @media (max-width: 768px) {
+    margin: 0 1em 0 0;
+  }
 `;
 
 const StyledSearchBarInput = styled.input`

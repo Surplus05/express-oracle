@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { StyledInnerLayoutWrapper } from "../../common/style";
-import Button from "../Button";
+import Button from "../common/Button";
+import ControlPanel from "./ControlPanel";
 import MenuButton from "./MenuButton";
 import SearchBar from "./SearchBar";
 
 const StyledHeaderWrapper = styled.div`
+  z-index: 1;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -15,15 +17,6 @@ const StyledHeaderWrapper = styled.div`
   background-color: #fff;
   box-shadow: rgb(0 0 0 / 10%) 0px -1px 0px 0px inset;
   box-sizing: border-box;
-`;
-
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 9em;
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
 `;
 
 const Header = () => {
@@ -41,11 +34,7 @@ const Header = () => {
           alt="logo"
         ></img>
         <SearchBar></SearchBar>
-        <StyledButtonWrapper>
-          <Button isColor={false} text="로그인"></Button>
-          <Button isColor={true} text="회원가입"></Button>
-        </StyledButtonWrapper>
-        <MenuButton></MenuButton>
+        <ControlPanel></ControlPanel>
       </StyledInnerLayoutWrapper>
     </StyledHeaderWrapper>
   );

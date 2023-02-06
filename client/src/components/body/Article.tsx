@@ -3,9 +3,10 @@ import styled from "styled-components";
 import ArticleInListType from "../../common/types";
 
 const StyledArticleItemWrapper = styled.div`
+  font-size: 0.75em;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: calc(100%- 1.5em);
   overflow: hidden;
@@ -14,19 +15,24 @@ const StyledArticleItemWrapper = styled.div`
 `;
 
 const StyledTitleSpan = styled.span`
-  font-size: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
-const StyledWriterSpan = styled.span`
-  font-size: 1em;
+const StyledWUserNameSpan = styled.span`
+  white-space: nowrap;
 `;
 
 const StyledInfoWrapper = styled.div`
   display: flex;
+  flex-grow: 1;
+  width: 0;
   flex-direction: column;
 `;
 
 const StyledStatWrapper = styled.div`
   font-size: 0.75em;
+  user-select: none;
   display: flex;
   justify-content: flex-start;
   align-content: center;
@@ -38,43 +44,41 @@ const StyledStatItemWrapper = styled.div`
   margin: 0;
   padding: 0;
   width: 2em;
-  margin-right: 1.25em;
+  margin-right: 1.5em;
 `;
 
-const StyledUserInfoWrapper = styled.div``;
+const StyledUserInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
 
 const Article = ({ data }: { data: ArticleInListType }) => {
-  console.log(data);
   return (
     <StyledArticleItemWrapper>
       <StyledInfoWrapper>
         <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
         <StyledStatWrapper>
           <StyledStatItemWrapper>
-            <i
-              className="fa-regular fa-eye"
-              style={{ lineHeight: "1.4em" }}
-            ></i>
+            <i className="fa-regular fa-eye" style={StatIconStyle}></i>
             {data.VIEWS}
           </StyledStatItemWrapper>
           <StyledStatItemWrapper>
-            <i
-              className="fa-regular fa-comment-dots"
-              style={{ lineHeight: "1.4em" }}
-            ></i>
+            <i className="fa-regular fa-comment-dots" style={StatIconStyle}></i>
             {data.COMMENTS}
           </StyledStatItemWrapper>
           <StyledStatItemWrapper>
-            <i
-              className="fa-regular fa-thumbs-up"
-              style={{ lineHeight: "1.4em" }}
-            ></i>
+            <i className="fa-regular fa-thumbs-up" style={StatIconStyle}></i>
             {data.LIKES}
           </StyledStatItemWrapper>
         </StyledStatWrapper>
       </StyledInfoWrapper>
       <StyledUserInfoWrapper>
-        <i className="fa-solid fa-user"></i> {data.USERNAME}
+        <i className="fa-solid fa-user" style={{ marginRight: "0.5em" }}></i>
+        <StyledWUserNameSpan>{data.USERNAME}</StyledWUserNameSpan>
       </StyledUserInfoWrapper>
     </StyledArticleItemWrapper>
   );

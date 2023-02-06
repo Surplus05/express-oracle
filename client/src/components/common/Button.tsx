@@ -20,8 +20,25 @@ const StyledButton = styled.button<ButtonColorProps>`
   user-select: none;
 `;
 
-const Button = ({ text, isColor }: { text: string; isColor: boolean }) => {
-  return <StyledButton isColor={isColor}>{text}</StyledButton>;
+const Button = ({
+  text,
+  isColor,
+  onClick,
+}: {
+  text: string;
+  isColor: boolean;
+  onClick: Function;
+}) => {
+  return (
+    <StyledButton
+      isColor={isColor}
+      onClick={() => {
+        onClick();
+      }}
+    >
+      {text}
+    </StyledButton>
+  );
 };
 
 export default Button;

@@ -50,8 +50,10 @@ const MenuButton = () => {
         setIsActive(!isActive);
       }}
     >
-      {lineStyles.map((lineStyle) => {
-        return <StyledMenuLine customStyles={lineStyle}></StyledMenuLine>;
+      {lineStyles.map((lineStyle, index) => {
+        return (
+          <StyledMenuLine key={index} customStyles={lineStyle}></StyledMenuLine>
+        );
       })}
     </StyledMenuWrapper>
   );
