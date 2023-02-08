@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 import styled from "styled-components";
 import {
   StyledModalInput,
@@ -8,7 +7,7 @@ import {
   StyledSignInButton,
   StyledSpanText,
 } from "../../common/style";
-import { checkDuplicate, registerPost } from "../../service/express";
+import { checkDuplicate, signUp } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
 
 const StyledModalButton = styled.button`
@@ -35,7 +34,6 @@ const SignUpModal = () => {
   const [usernameDuplicated, setUsernameDuplicated] = useState<boolean>(true);
   const [pwConstraint, setPwConstraint] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
   const onFocusInput = useCallback((e: React.BaseSyntheticEvent) => {
     (e.target.parentNode as HTMLDivElement).style.border = "";
     e.target.parentNode.classList.add("focusIn");
@@ -98,11 +96,11 @@ const SignUpModal = () => {
     if (!emailRef.current || !pwRef.current || !usernameRef.current) return;
     e.preventDefault();
     setIsLoading(true);
-    registerPost(
-      emailRef.current.value,
-      pwRef.current?.value,
-      usernameRef.current.value
-    ).then((response) => {
+    signUp({
+      mail: emailRef.current.value,
+      pw: pwRef.current.value,
+      username: usernameRef.current.value,
+    }).then((response) => {
       if (response.data) {
         alert("가입이 완료되었습니다.");
         // eslint-disable-next-line no-restricted-globals

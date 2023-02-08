@@ -1,13 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { StyledInnerLayoutWrapper } from "../../common/style";
-import Button from "../common/Button";
 import ControlPanel from "./ControlPanel";
-import MenuButton from "./MenuButton";
 import SearchBar from "./SearchBar";
 
 const StyledHeaderWrapper = styled.div`
-  z-index: 1;
   position: fixed;
   display: flex;
   justify-content: center;

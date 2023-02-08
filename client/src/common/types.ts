@@ -1,4 +1,4 @@
-interface ArticleInListType {
+export default interface ArticleInListType {
   COMMENTS: number;
   LIKES: number;
   NUM: number;
@@ -11,4 +11,28 @@ interface ArticleInListType {
   WRITER_ID: number;
 }
 
-export default ArticleInListType;
+export interface SignInTypes {
+  mail: string;
+  pw: string;
+}
+export interface SignUpTypes {
+  mail: string;
+  pw: string;
+  username: string;
+}
+
+export interface WritePostTypes {
+  writerId: number;
+  title: string;
+  post: string;
+}
+
+export interface userState {
+  USER_ID: number;
+}
+
+export interface WriteCommentTypes {
+  postId: number;
+  userId: number;
+  text: string;
+}

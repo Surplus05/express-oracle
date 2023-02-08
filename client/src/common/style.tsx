@@ -24,6 +24,10 @@ const GlobalStyle = createGlobalStyle`body {
     border: 1px solid var(--color--main);
   }
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
 }
 `;
 export default GlobalStyle;
@@ -51,6 +55,7 @@ export const StyledModalWrapper = styled.div`
   height: calc(100% - 4.55em);
   width: calc(100% - 1.5em);
   overflow: hidden;
+  transition: 0.3s;
 `;
 
 export const StyledSpanText = styled.span`
@@ -93,7 +98,36 @@ export const StyledSignInButton = styled.button`
   height: 2.5em;
   margin-top: 2em;
   border-radius: var(--border--radius);
+  font-family: "KoPubWorldDotum";
   :disabled {
     background-color: var(--color--gray--middle);
   }
+`;
+
+export const StyledMainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #fff;
+  width: calc(100% - 13em);
+  min-height: calc(100vh - 5.5em);
+  margin: 1em 0em 1em 0;
+  box-shadow: 0 0 0.375em var(--color--shadow);
+
+  @media screen and (max-width: 768px) {
+    width: calc(100% - 2em);
+    margin: 1em;
+  }
+`;
+
+export const StyledMainTitleWrapper = styled.div`
+  user-select: none;
+  display: flex;
+  height: 3.05em;
+  overflow: hidden;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100%);
+  box-shadow: rgb(0 0 0 / 10%) 0px -1px 0px 0px inset;
 `;

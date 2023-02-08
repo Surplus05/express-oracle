@@ -18,6 +18,7 @@ const StyledButton = styled.button<ButtonColorProps>`
   line-height: 1.6em;
   cursor: pointer;
   user-select: none;
+  margin-left: 1em;
 `;
 
 const Button = ({

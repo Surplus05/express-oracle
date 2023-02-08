@@ -7,8 +7,21 @@ export interface GetIsDuplicateTypes {
   username?: string;
 }
 
-export interface PostUserInfoTypes {
+export interface SignInTypes {
   mail: string;
   pw: string;
+}
+export interface SignUpTypes extends SignInTypes {
   username: string;
+}
+
+export interface SocialTypes {
+  postId: number;
+  like: boolean;
+}
+
+export interface CommentTypes {
+  postId: number;
+  userId: number;
+  text: string;
 }

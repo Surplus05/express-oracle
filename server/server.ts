@@ -1,7 +1,12 @@
 import express, { Request, Response } from "express";
+import { title } from "process";
+import { WritePostTypes } from "../client/src/common/types";
 import GetArticleListTypes, {
+  CommentTypes,
   GetIsDuplicateTypes,
-  PostUserInfoTypes,
+  SignInTypes,
+  SignUpTypes,
+  SocialTypes,
 } from "./types";
 const app = express();
 const oracledb = require("oracledb");
@@ -37,6 +42,47 @@ app
     await getPageArcitleList(params, response);
   });
 
+app.route("/view").get(async function (request: Request, response: Response) {
+  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  let postId = Number(request.query.postId);
+  if (postId != null) {
+    await getArticle(postId, response);
+  } else {
+    response.status(404);
+    response.send();
+  }
+});
+
+app.route("/social").get(async function (request: Request, response: Response) {
+  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  const data: SocialTypes = {
+    postId: Number(request.query.postId),
+    like: request.query.like === "true" ? true : false,
+  };
+  if (data.postId != null) {
+    await socialLike(data, response);
+  } else {
+    response.status(404);
+    response.send();
+  }
+});
+app
+  .route("/comments")
+  .get(async function (request: Request, response: Response) {
+    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    const postId: number = Number(request.query.postId);
+    if (postId != null) {
+      await getComments(postId, response);
+    } else {
+      response.status(404);
+      response.send();
+    }
+  })
+  .post(async function (request: Request, response: Response) {
+    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    await postComments(JSON.parse(request.body), response);
+  });
+
 app
   .route("/signup")
   .get(async function (request: Request, response: Response) {
@@ -46,9 +92,27 @@ app
   })
   .post(async function (request: Request, response: Response) {
     response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-
-    await postUserInfo(JSON.parse(request.body), response);
+    await postSignUp(JSON.parse(request.body), response);
   });
+
+app
+  .route("/signin")
+  .post(async function (request: Request, response: Response) {
+    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    let userInfo = await postSignIn(JSON.parse(request.body), response);
+
+    if (userInfo.rows.length) {
+      response.send(userInfo);
+    } else {
+      response.status(401);
+      response.send();
+    }
+  });
+
+app.route("/write").post(async function (request: Request, response: Response) {
+  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  await postWritePost(JSON.parse(request.body), response);
+});
 
 async function getPageArcitleList(
   params: GetArticleListTypes,
@@ -70,6 +134,108 @@ async function getPageArcitleList(
     );
 
     response.send({ ...data, totalArticles });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function getArticle(pageId: number, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    await connection.execute(
+      `UPDATE POSTS SET VIEWS = VIEWS + 1 WHERE POST_ID = ${pageId}`
+    );
+    connection.commit();
+    let data = await connection.execute(
+      `SELECT A.POST_ID, A.WRITER_ID, A.POST, A.PUBLISHED, A.TITLE, A.VIEWS, A.LIKES, A.DISLIKES, A.COMMENTS, B.USERNAME , B.USER_ID      
+      FROM POSTS A INNER JOIN USER_INFO B ON A.WRITER_ID = B.USER_ID WHERE A.POST_ID = ${pageId}
+      `,
+      []
+    );
+    response.send(data.rows[0]);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function getComments(pageId: number, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    connection.commit();
+    let data = await connection.execute(
+      `SELECT A.POST_ID, A.WRITER_ID, A.COMMENT_TEXT, A.PUBLISHED, B.POST_ID, C.USER_ID, C.USERNAME   
+      FROM COMMENTS A INNER JOIN POSTS B ON A.POST_ID = B.POST_ID INNER JOIN USER_INFO C ON A.WRITER_ID = C.USER_ID WHERE B.POST_ID = ${pageId}`,
+      []
+    );
+    response.send(data.rows);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function postComments(data: CommentTypes, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    connection.execute(`INSERT INTO COMMENTS VALUES(COMMENTS_SEQ.NEXTVAL, ${data.postId}, ${data.userId}, '${data.text}', sysdate)
+    `);
+    connection.execute(
+      `UPDATE POSTS SET COMMENTS = COMMENTS + 1 WHERE POST_ID = ${data.postId}`
+    );
+    connection.commit();
+    response.send(true);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function socialLike(data: SocialTypes, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    let likeString = data.like ? "LIKES" : "DISLIKES";
+    await connection.execute(
+      `UPDATE POSTS SET ${likeString} = ${likeString} + 1 WHERE POST_ID = ${data.postId}`
+    );
+    connection.commit();
+    let social = await connection.execute(
+      `SELECT ${likeString} FROM POSTS WHERE POST_ID = ${data.postId}`
+    );
+    response.send(social.rows[0]);
   } catch (error) {
     console.log(error);
   } finally {
@@ -116,7 +282,7 @@ async function getIsDuplicate(params: GetIsDuplicateTypes, response: Response) {
   }
 }
 
-async function postUserInfo(data: PostUserInfoTypes, response: Response) {
+async function postSignUp(data: SignUpTypes, response: Response) {
   let connection;
   try {
     connection = await oracledb.getConnection(dbconfig);
@@ -124,6 +290,50 @@ async function postUserInfo(data: PostUserInfoTypes, response: Response) {
       `INSERT INTO USER_INFO VALUES(USER_INFO_SEQ.NEXTVAL, '${data.username}', '${data.mail}', '${data.pw}', sysdate)`
     );
     await connection.commit();
+    response.send(true);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function postSignIn(data: SignInTypes, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    let userInfo = await connection.execute(
+      `SELECT USER_INFO.USER_ID FROM USER_INFO WHERE MAIL='${data.mail}' AND PW = '${data.pw}'`
+    );
+
+    return userInfo;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function postWritePost(data: WritePostTypes, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    await connection.execute(
+      `INSERT INTO POSTS VALUES(POSTS_SEQ.NEXTVAL, ${data.writerId}, '${data.post}', sysdate, '${data.title}', 0, 0, 0, 0)`
+    );
+    connection.commit();
     response.send(true);
   } catch (error) {
     console.log(error);
@@ -180,3 +390,8 @@ async function postUserInfo(data: PostUserInfoTypes, response: Response) {
 // post method에서 application/json 을 그대로 받는것은 불가능 인코딩해 받아야함.
 // www-form-urlencoded 으로 인코딩된다.
 // 왜 key에 모든값이 들어가있는걸까
+
+// 논의 1.
+// 분기 처리를 오라클 함수 내부 외부 어디서 할 지 고민이다.
+// 함수 외부에서 하는게 맞아 보임.
+// 함수에서는 oracle 관련 로직만 실행하고 그 결과에 따른 response 는 app.route 쪽에서 처리하는것이 맞다고 봄.

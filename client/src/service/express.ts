@@ -1,9 +1,23 @@
+import { SignInTypes } from "./../../../server/types";
 import axios from "axios";
+import {
+  SignUpTypes,
+  WriteCommentTypes,
+  WritePostTypes,
+} from "../common/types";
 
 export async function getPageArcitleList(page: number) {
   return await axios.get("http://localhost:5000/article", {
     params: {
-      page: page,
+      page,
+    },
+  });
+}
+
+export async function getArticle(postId: number) {
+  return await axios.get("http://localhost:5000/view", {
+    params: {
+      postId,
     },
   });
 }
@@ -16,14 +30,57 @@ export async function checkDuplicate(column: string, data: string) {
   });
 }
 
-export async function registerPost(mail: string, pw: string, username: string) {
-  const data = {
-    mail,
-    pw,
-    username,
-  };
+export async function signUp(data: SignUpTypes) {
   return await axios.post(
     "http://localhost:5000/signup",
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
+}
+
+export async function signInRequest(data: SignInTypes) {
+  return await axios.post(
+    "http://localhost:5000/signin",
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
+}
+
+export async function writePost(data: WritePostTypes) {
+  return await axios.post("http://localhost:5000/write", JSON.stringify(data), {
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  });
+}
+
+export async function postLike(postId: number, like: boolean) {
+  return await axios.get("http://localhost:5000/social", {
+    params: {
+      postId,
+      like,
+    },
+  });
+}
+
+export async function getComments(postId: number) {
+  return await axios.get("http://localhost:5000/comments", {
+    params: {
+      postId,
+    },
+  });
+}
+export async function writeComment(data: WriteCommentTypes) {
+  return await axios.post(
+    "http://localhost:5000/comments",
     JSON.stringify(data),
     {
       headers: {

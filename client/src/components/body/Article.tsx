@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import ArticleInListType from "../../common/types";
 
@@ -11,7 +12,14 @@ const StyledArticleItemWrapper = styled.div`
   width: calc(100%- 1.5em);
   overflow: hidden;
   margin: 0 0.75em;
+  padding: 0 0.75em;
+  border-radius: var(--border--radius);
   height: 3.36em;
+  cursor: pointer;
+  :hover {
+    background-color: var(--color--main);
+    color: #fff;
+  }
 `;
 
 const StyledTitleSpan = styled.span`
@@ -43,7 +51,6 @@ const StyledStatItemWrapper = styled.div`
   justify-content: space-between;
   margin: 0;
   padding: 0;
-  width: 2em;
   margin-right: 1.5em;
 `;
 
@@ -57,8 +64,12 @@ const StyledUserInfoWrapper = styled.div`
 const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
 
 const Article = ({ data }: { data: ArticleInListType }) => {
+  const navigate = useNavigate();
+  function onClickArticle() {
+    navigate(`/view?postId=${data.POST_ID}`);
+  }
   return (
-    <StyledArticleItemWrapper>
+    <StyledArticleItemWrapper onClick={onClickArticle}>
       <StyledInfoWrapper>
         <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
         <StyledStatWrapper>
