@@ -9,8 +9,7 @@ export function getDateString(date: Date): string {
   const timeDifferent = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   let dateString: string = "null";
-  if (timeDifferent < SECOND_RANGE)
-    dateString = `${Math.floor(timeDifferent)}초 전`;
+  if (timeDifferent < SECOND_RANGE) dateString = `조금 전`;
   else if (timeDifferent >= SECOND_RANGE && timeDifferent < MINUTE_RANGE)
     dateString = `${Math.floor(timeDifferent / 60)}분 전`;
   else if (timeDifferent >= MINUTE_RANGE && timeDifferent < HOUR_RANGE)

@@ -4,8 +4,7 @@ import { getDateString } from "../../../common/functions";
 
 const StyledCommentWrapper = styled.div`
   display: flex;
-  align-items: center;
-
+  align-items: flex-start;
   margin: 0.5em 0;
 `;
 
@@ -29,7 +28,9 @@ const Comment = ({ comment }: { comment: any }) => {
       <div style={{ width: "calc(100% - 3em)" }}>
         <div>
           <span style={{ fontWeight: "bold" }}>{comment.USERNAME}</span>
-          <span>{"ㆍ" + getDateString(new Date(comment.PUBLISHED))}</span>
+          <span style={{ fontSize: "0.875em" }}>
+            {"ㆍ" + getDateString(new Date(comment.PUBLISHED))}
+          </span>
         </div>
         {comment.COMMENT_TEXT}
       </div>

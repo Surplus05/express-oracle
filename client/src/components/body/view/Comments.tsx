@@ -101,7 +101,9 @@ const Comments = ({ postId }: { postId: number }) => {
         <StyledMainTextWrapper>
           <StyledCommentsWrapper>
             {comments.map((comment: any) => {
-              return <Comment comment={comment}></Comment>;
+              return (
+                <Comment key={comment.COMMENT_ID} comment={comment}></Comment>
+              );
             })}
           </StyledCommentsWrapper>
         </StyledMainTextWrapper>

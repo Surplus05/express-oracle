@@ -79,7 +79,7 @@ const ViewHeader = ({ data }: { data: ViewHeaderProps }) => {
               className="fa-solid fa-user"
               style={{ marginRight: "0.5em" }}
             ></i>
-            {data.USERNAME}
+            <span style={{ fontWeight: "bold" }}>{data.USERNAME}</span>
           </StyledStatSpan>
           <StyledStatSpan>{getDateString(date)}</StyledStatSpan>
         </div>

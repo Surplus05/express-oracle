@@ -25,3 +25,9 @@ export interface CommentTypes {
   userId: number;
   text: string;
 }
+
+export interface EditPostTypes {
+  title: string;
+  post: string;
+  postId: number;
+}

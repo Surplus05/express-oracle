@@ -1,6 +1,7 @@
 import { SignInTypes } from "./../../../server/types";
 import axios from "axios";
 import {
+  EditPostTypes,
   SignUpTypes,
   WriteCommentTypes,
   WritePostTypes,
@@ -58,6 +59,22 @@ export async function writePost(data: WritePostTypes) {
   return await axios.post("http://localhost:5000/write", JSON.stringify(data), {
     headers: {
       "Content-Type": "text/plain",
+    },
+  });
+}
+
+export async function editPost(data: EditPostTypes) {
+  return await axios.post("http://localhost:5000/edit", JSON.stringify(data), {
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  });
+}
+
+export async function deletePost(postId: number) {
+  return await axios.get("http://localhost:5000/delete", {
+    params: {
+      postId,
     },
   });
 }

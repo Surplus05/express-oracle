@@ -3,6 +3,7 @@ import { title } from "process";
 import { WritePostTypes } from "../client/src/common/types";
 import GetArticleListTypes, {
   CommentTypes,
+  EditPostTypes,
   GetIsDuplicateTypes,
   SignInTypes,
   SignUpTypes,
@@ -114,6 +115,21 @@ app.route("/write").post(async function (request: Request, response: Response) {
   await postWritePost(JSON.parse(request.body), response);
 });
 
+app.route("/edit").post(async function (request: Request, response: Response) {
+  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  await editPost(JSON.parse(request.body), response);
+});
+app.route("/delete").get(async function (request: Request, response: Response) {
+  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  let postId = Number(request.query.postId);
+  if (postId != null) {
+    await deletePost(postId, response);
+  } else {
+    response.status(404);
+    response.send();
+  }
+});
+
 async function getPageArcitleList(
   params: GetArticleListTypes,
   response: Response
@@ -175,13 +191,59 @@ async function getArticle(pageId: number, response: Response) {
   }
 }
 
+async function editPost(data: EditPostTypes, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    await connection.execute(
+      `UPDATE POSTS SET TITLE = '${data.title}', POST = '${data.post}' WHERE POST_ID = ${data.postId}`,
+      []
+    );
+    connection.commit();
+    response.send(true);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+async function deletePost(pageId: number, response: Response) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    await connection.execute(
+      `DELETE FROM COMMENTS WHERE POST_ID = ${pageId}`,
+      []
+    );
+    await connection.execute(`DELETE FROM POSTS WHERE POST_ID = ${pageId}`, []);
+    connection.commit();
+    response.send(true);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
 async function getComments(pageId: number, response: Response) {
   let connection;
   try {
     connection = await oracledb.getConnection(dbconfig);
-    connection.commit();
     let data = await connection.execute(
-      `SELECT A.POST_ID, A.WRITER_ID, A.COMMENT_TEXT, A.PUBLISHED, B.POST_ID, C.USER_ID, C.USERNAME   
+      `SELECT A.COMMENT_ID, A.POST_ID, A.WRITER_ID, A.COMMENT_TEXT, A.PUBLISHED, B.POST_ID, C.USER_ID, C.USERNAME   
       FROM COMMENTS A INNER JOIN POSTS B ON A.POST_ID = B.POST_ID INNER JOIN USER_INFO C ON A.WRITER_ID = C.USER_ID WHERE B.POST_ID = ${pageId}`,
       []
     );

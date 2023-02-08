@@ -116,8 +116,8 @@ export const StyledMainContainer = styled.div`
   box-shadow: 0 0 0.375em var(--color--shadow);
 
   @media screen and (max-width: 768px) {
-    width: calc(100% - 2em);
-    margin: 1em;
+    width: calc(100%);
+    margin: 1em 0;
   }
 `;
 

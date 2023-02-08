@@ -27,6 +27,12 @@ export interface WritePostTypes {
   post: string;
 }
 
+export interface EditPostTypes {
+  title: string;
+  post: string;
+  postId: number;
+}
+
 export interface userState {
   USER_ID: number;
 }

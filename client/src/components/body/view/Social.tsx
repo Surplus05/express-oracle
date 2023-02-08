@@ -9,14 +9,19 @@ const StyledSocialWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 0.5em;
-  padding-bottom: 0.5em;
   width: calc(100% - 1em);
   box-shadow: rgb(0 0 0 / 10%) 0px -1px 0px 0px inset;
 `;
 
+const StyledSocialBox = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5em 2em;
+  font-size: 0.5em;
+`;
+
 const StyledSocialButton = styled.div`
   user-select: none;
-  font-size: 0.75em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,10 +31,6 @@ const StyledSocialButton = styled.div`
   padding: 0.5em;
   cursor: pointer;
   color: #fff;
-  @media screen and (max-width: 768px) {
-    font-size: 0.5em;
-  }
-
   :hover {
     background-color: var(--color--gray--middle);
   }
@@ -59,18 +60,22 @@ const Social = ({
 
   return (
     <StyledSocialWrapper>
-      <StyledSocialButton
-        onClick={onClickLike}
-        style={{ backgroundColor: "#4080FF", marginRight: "1em" }}
-      >
+      <StyledSocialBox>
         {likeState}
-      </StyledSocialButton>
-      <StyledSocialButton
-        onClick={onClickDislike}
-        style={{ backgroundColor: "#F25268" }}
-      >
+        <StyledSocialButton
+          onClick={onClickLike}
+          style={{ backgroundColor: "#4080FF", margin: "0 1em" }}
+        >
+          <i className="fa-regular fa-thumbs-up"></i>
+        </StyledSocialButton>
+        <StyledSocialButton
+          onClick={onClickDislike}
+          style={{ backgroundColor: "#F25268", marginRight: "1em" }}
+        >
+          <i className="fa-regular fa-thumbs-down"></i>
+        </StyledSocialButton>
         {dislikeState}
-      </StyledSocialButton>
+      </StyledSocialBox>
     </StyledSocialWrapper>
   );
 };
