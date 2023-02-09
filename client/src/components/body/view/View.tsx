@@ -3,26 +3,13 @@ import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { StyledMainContainer } from "../../../common/style";
-import { deletePost, getArticle } from "../../../service/express";
+import { PostType } from "../../../common/types";
+import { deletePost, getPost } from "../../../service/express";
 import EditModal from "../../modal/EditModal";
 import ModalBox from "../../modal/ModalBox";
 import Comments from "./Comments";
 import Social from "./Social";
 import ViewHeader from "./ViewHeader";
-
-interface PostData {
-  COMMENTS: number;
-  DISLIKES: number;
-  LIKES: number;
-  POST: string;
-  POST_ID: number;
-  PUBLISHED: string;
-  TITLE: string;
-  USERNAME: string;
-  USER_ID: number;
-  VIEWS: number;
-  WRITER_ID: number;
-}
 
 const StyledMainTextWrapper = styled.div`
   margin: 0.75em;
@@ -30,7 +17,7 @@ const StyledMainTextWrapper = styled.div`
   min-height: 20em;
 `;
 
-const StyledButtonBoxWrapper = styled.div`
+const StyledButtonList = styled.div`
   margin: 0 0.75em 0.75em 0.75em;
   width: calc(100% - 1.5em);
   display: flex;
@@ -52,12 +39,12 @@ const View = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [currentArticle, setCurrentArticle] = useState<PostData>();
+  const [currentArticle, setCurrentArticle] = useState<PostType>();
 
   useEffect(() => {
     const postId = searchParams.get("postId");
     if (postId != null) {
-      getArticle(Number(postId)).then((value: any) => {
+      getPost(Number(postId)).then((value: any) => {
         setCurrentArticle(value.data);
       });
     }
@@ -98,11 +85,13 @@ const View = () => {
         </StyledMainTextWrapper>
         <Social
           postId={currentArticle.POST_ID}
-          like={currentArticle.LIKES}
-          dislike={currentArticle.DISLIKES}
+          statistic={{
+            like: currentArticle.LIKES,
+            dislike: currentArticle.DISLIKES,
+          }}
         ></Social>
         <Comments postId={currentArticle.POST_ID}></Comments>
-        <StyledButtonBoxWrapper>
+        <StyledButtonList>
           <StyledControlButton
             onClick={() => {
               navigate("/main?page=1");
@@ -128,7 +117,7 @@ const View = () => {
               </StyledControlButton>
             </div>
           )}
-        </StyledButtonBoxWrapper>
+        </StyledButtonList>
       </StyledMainContainer>
       {showEditModal && (
         <ModalBox

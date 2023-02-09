@@ -4,8 +4,6 @@ import {
   StyledModalInput,
   StyledModalInputWrapper,
   StyledModalWrapper,
-  StyledSignInButton,
-  StyledSpanText,
 } from "../../common/style";
 import { checkDuplicate, signUp } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
@@ -116,7 +114,7 @@ const SignUpModal = () => {
   return (
     <StyledModalWrapper>
       <form style={{ width: "100%" }}>
-        <StyledSpanText>메일</StyledSpanText>
+        <span style={{ userSelect: "none" }}>메일</span>
         <StyledCheckWrapper className="email">
           <StyledModalInputWrapper>
             <StyledModalInput
@@ -144,7 +142,7 @@ const SignUpModal = () => {
             ></i>
           )}
         </StyledCheckWrapper>
-        <StyledSpanText>비밀번호</StyledSpanText>
+        <span style={{ userSelect: "none" }}>비밀번호</span>
         <StyledCheckWrapper>
           <StyledModalInputWrapper>
             <StyledModalInput
@@ -183,7 +181,7 @@ const SignUpModal = () => {
             ></i>
           )}
         </StyledCheckWrapper>
-        <StyledSpanText>닉네임</StyledSpanText>
+        <span style={{ userSelect: "none" }}>닉네임</span>
         <StyledCheckWrapper className="username">
           <StyledModalInputWrapper>
             <StyledModalInput
@@ -211,12 +209,12 @@ const SignUpModal = () => {
             ></i>
           )}
         </StyledCheckWrapper>
-        <StyledSignInButton
+        <StyledModalButton
           disabled={emailDuplicated || usernameDuplicated || !pwConstraint}
           onClick={onClickRegister}
         >
           회원가입
-        </StyledSignInButton>
+        </StyledModalButton>
       </form>
       {isLoading && (
         <div

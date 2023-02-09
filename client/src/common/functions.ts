@@ -5,6 +5,7 @@ export function getDateString(date: Date): string {
   const WEEK_RANGE = HOUR_RANGE * 7;
   const MONTH_RANGE = WEEK_RANGE * 4;
   const YEAR_RANGE = MONTH_RANGE * 12;
+
   const now = new Date();
   const timeDifferent = Math.floor((now.getTime() - date.getTime()) / 1000);
 

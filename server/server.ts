@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { title } from "process";
-import { WritePostTypes } from "../client/src/common/types";
+import { WritePost } from "../client/src/common/types";
 import GetArticleListTypes, {
   CommentTypes,
   EditPostTypes,
@@ -244,7 +244,7 @@ async function getComments(pageId: number, response: Response) {
     connection = await oracledb.getConnection(dbconfig);
     let data = await connection.execute(
       `SELECT A.COMMENT_ID, A.POST_ID, A.WRITER_ID, A.COMMENT_TEXT, A.PUBLISHED, B.POST_ID, C.USER_ID, C.USERNAME   
-      FROM COMMENTS A INNER JOIN POSTS B ON A.POST_ID = B.POST_ID INNER JOIN USER_INFO C ON A.WRITER_ID = C.USER_ID WHERE B.POST_ID = ${pageId}`,
+      FROM COMMENTS A INNER JOIN POSTS B ON A.POST_ID = B.POST_ID INNER JOIN USER_INFO C ON A.WRITER_ID = C.USER_ID WHERE B.POST_ID = ${pageId} ORDER BY A.PUBLISHED ASC`,
       []
     );
     response.send(data.rows);
@@ -388,7 +388,7 @@ async function postSignIn(data: SignInTypes, response: Response) {
   }
 }
 
-async function postWritePost(data: WritePostTypes, response: Response) {
+async function postWritePost(data: WritePost, response: Response) {
   let connection;
   try {
     connection = await oracledb.getConnection(dbconfig);

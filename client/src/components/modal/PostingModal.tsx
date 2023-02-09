@@ -1,13 +1,12 @@
 import React, { useRef, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
+  StyledModalButton,
   StyledModalInput,
   StyledModalInputWrapper,
   StyledModalWrapper,
-  StyledSignInButton,
-  StyledSpanText,
 } from "../../common/style";
-import { WritePostTypes } from "../../common/types";
+import { WritePost } from "../../common/types";
 import { writePost } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
 
@@ -29,7 +28,7 @@ const PostingModal = () => {
     if (!titleRef.current || !postRef.current) return;
     if (!titleRef.current.value || !postRef.current.value) return;
     setIsLoading(true);
-    const postData: WritePostTypes = {
+    const postData: WritePost = {
       writerId: uid,
       title: titleRef.current.value,
       post: postRef.current.value,
@@ -55,7 +54,7 @@ const PostingModal = () => {
           flexDirection: "column",
         }}
       >
-        <StyledSpanText>제목</StyledSpanText>
+        <span style={{ userSelect: "none" }}>제목</span>
         <StyledModalInputWrapper>
           <StyledModalInput
             ref={titleRef}
@@ -64,7 +63,7 @@ const PostingModal = () => {
             onBlur={onBlurInput}
           ></StyledModalInput>
         </StyledModalInputWrapper>
-        <StyledSpanText>본문</StyledSpanText>
+        <span style={{ userSelect: "none" }}>본문</span>
         <StyledModalInputWrapper style={{ height: "100%" }}>
           <textarea
             style={{
@@ -80,9 +79,9 @@ const PostingModal = () => {
             onBlur={onBlurInput}
           ></textarea>
         </StyledModalInputWrapper>
-        <StyledSignInButton style={{ marginTop: "0" }} onClick={postWrite}>
+        <StyledModalButton style={{ marginTop: "0" }} onClick={postWrite}>
           작성
-        </StyledSignInButton>
+        </StyledModalButton>
       </form>
       {isLoading && (
         <div

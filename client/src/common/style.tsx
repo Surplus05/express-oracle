@@ -58,10 +58,6 @@ export const StyledModalWrapper = styled.div`
   transition: 0.3s;
 `;
 
-export const StyledSpanText = styled.span`
-  user-select: none;
-`;
-
 export const StyledModalInputWrapper = styled.div`
   border: 1px solid var(--color--gray-outFoucs);
   padding: 0.25em;
@@ -84,7 +80,7 @@ export const StyledModalInput = styled.input`
   }
 `;
 
-export const StyledSignInButton = styled.button`
+export const StyledModalButton = styled.button`
   user-select: none;
   cursor: pointer;
   display: flex;

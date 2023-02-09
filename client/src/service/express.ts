@@ -1,13 +1,13 @@
-import { SignInTypes } from "./../../../server/types";
 import axios from "axios";
 import {
-  EditPostTypes,
-  SignUpTypes,
-  WriteCommentTypes,
-  WritePostTypes,
+  EditPost,
+  SignIn,
+  SignUp,
+  WriteComment,
+  WritePost,
 } from "../common/types";
 
-export async function getPageArcitleList(page: number) {
+export async function getPostList(page: number) {
   return await axios.get("http://localhost:5000/article", {
     params: {
       page,
@@ -15,7 +15,7 @@ export async function getPageArcitleList(page: number) {
   });
 }
 
-export async function getArticle(postId: number) {
+export async function getPost(postId: number) {
   return await axios.get("http://localhost:5000/view", {
     params: {
       postId,
@@ -31,7 +31,7 @@ export async function checkDuplicate(column: string, data: string) {
   });
 }
 
-export async function signUp(data: SignUpTypes) {
+export async function signUp(data: SignUp) {
   return await axios.post(
     "http://localhost:5000/signup",
     JSON.stringify(data),
@@ -43,7 +43,7 @@ export async function signUp(data: SignUpTypes) {
   );
 }
 
-export async function signInRequest(data: SignInTypes) {
+export async function signIn(data: SignIn) {
   return await axios.post(
     "http://localhost:5000/signin",
     JSON.stringify(data),
@@ -55,7 +55,7 @@ export async function signInRequest(data: SignInTypes) {
   );
 }
 
-export async function writePost(data: WritePostTypes) {
+export async function writePost(data: WritePost) {
   return await axios.post("http://localhost:5000/write", JSON.stringify(data), {
     headers: {
       "Content-Type": "text/plain",
@@ -63,7 +63,7 @@ export async function writePost(data: WritePostTypes) {
   });
 }
 
-export async function editPost(data: EditPostTypes) {
+export async function editPost(data: EditPost) {
   return await axios.post("http://localhost:5000/edit", JSON.stringify(data), {
     headers: {
       "Content-Type": "text/plain",
@@ -79,7 +79,7 @@ export async function deletePost(postId: number) {
   });
 }
 
-export async function postLike(postId: number, like: boolean) {
+export async function postSocial(postId: number, like: boolean) {
   return await axios.get("http://localhost:5000/social", {
     params: {
       postId,
@@ -95,7 +95,7 @@ export async function getComments(postId: number) {
     },
   });
 }
-export async function writeComment(data: WriteCommentTypes) {
+export async function writeComment(data: WriteComment) {
   return await axios.post(
     "http://localhost:5000/comments",
     JSON.stringify(data),

@@ -14,7 +14,7 @@ const StyledModalWrapper = styled.div`
   background-color: var(--color--transparent);
 `;
 
-const StyledModalInnerDiv = styled.div`
+const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 24em;
@@ -53,7 +53,7 @@ const ModalBox = ({
   }
   return (
     <StyledModalWrapper className="outside" onMouseDown={onClickOutside}>
-      <StyledModalInnerDiv>
+      <StyledModal>
         <StyledModalTitle>
           {title}
           <IconButton
@@ -65,7 +65,7 @@ const ModalBox = ({
           </IconButton>
         </StyledModalTitle>
         {children}
-      </StyledModalInnerDiv>
+      </StyledModal>
     </StyledModalWrapper>
   );
 };

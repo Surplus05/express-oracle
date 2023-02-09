@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { MAX_COMMENT_LENGTH } from "../../../common/constant";
+import { UserState } from "../../../common/types";
 import { getComments, writeComment } from "../../../service/express";
 import Comment from "./Comment";
 
-const StyledMainTextWrapper = styled.div`
+const StyledCommentListWrapper = styled.div`
   margin: 0.75em;
   width: calc(100% - 1.5em);
   min-height: 14em;
 `;
 
-const StyledInputWrapper = styled.div`
+const StyledCommentInputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   border: 1px solid var(--color--gray-outFoucs);
@@ -22,7 +24,7 @@ const StyledInputWrapper = styled.div`
   align-items: center;
 `;
 
-const StyledSendButtonWrapper = styled.div`
+const StyledCommentWriteButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,12 +44,16 @@ const StyledSendButtonWrapper = styled.div`
   }
 `;
 
-const StyledCommentsWrapper = styled.div`
+const StyledCommentList = styled.ul`
   display: flex;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
   flex-direction: column;
 `;
 
-const StyledEmptyCommentWrapper = styled.div`
+const StyledEmptyComment = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,11 +81,11 @@ const Comments = ({ postId }: { postId: number }) => {
     e.target.parentNode.classList.remove("focusIn");
   }
 
-  function onClickSend() {
+  function onClickWrite() {
     if (
       commentRef.current &&
       commentRef.current.value &&
-      commentRef.current.value.length < 500
+      commentRef.current.value.length < MAX_COMMENT_LENGTH
     ) {
       const commentText = commentRef.current.value;
       commentRef.current.value = "";
@@ -94,26 +100,25 @@ const Comments = ({ postId }: { postId: number }) => {
       });
     }
   }
+
   if (comments == null) return <></>;
   return (
     <>
       {comments.length > 0 ? (
-        <StyledMainTextWrapper>
-          <StyledCommentsWrapper>
+        <StyledCommentListWrapper>
+          <StyledCommentList>
             {comments.map((comment: any) => {
               return (
                 <Comment key={comment.COMMENT_ID} comment={comment}></Comment>
               );
             })}
-          </StyledCommentsWrapper>
-        </StyledMainTextWrapper>
+          </StyledCommentList>
+        </StyledCommentListWrapper>
       ) : (
-        <StyledEmptyCommentWrapper>
-          댓글이 존재하지 않습니다.
-        </StyledEmptyCommentWrapper>
+        <StyledEmptyComment>댓글이 존재하지 않습니다.</StyledEmptyComment>
       )}
       {uid > 0 && (
-        <StyledInputWrapper>
+        <StyledCommentInputWrapper>
           <textarea
             style={{
               height: "4.2em",
@@ -128,10 +133,10 @@ const Comments = ({ postId }: { postId: number }) => {
             onFocus={onFocusInput}
             onBlur={onBlurInput}
           ></textarea>
-          <StyledSendButtonWrapper onClick={onClickSend}>
+          <StyledCommentWriteButton onClick={onClickWrite}>
             <i className="fa-solid fa-paper-plane"></i>
-          </StyledSendButtonWrapper>
-        </StyledInputWrapper>
+          </StyledCommentWriteButton>
+        </StyledCommentInputWrapper>
       )}
     </>
   );

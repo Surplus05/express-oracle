@@ -1,15 +1,13 @@
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import {
+  StyledModalButton,
   StyledModalInput,
   StyledModalInputWrapper,
   StyledModalWrapper,
-  StyledSignInButton,
-  StyledSpanText,
 } from "../../common/style";
 import { login } from "../../redux/user";
-import { signInRequest } from "../../service/express";
+import { signIn } from "../../service/express";
 import Caution from "./Caution";
 
 const SignInModal = () => {
@@ -25,11 +23,11 @@ const SignInModal = () => {
     e.target.parentNode.classList.remove("focusIn");
   }
 
-  const onSignIn = async (e: React.BaseSyntheticEvent) => {
+  const onClickSignIn = async (e: React.BaseSyntheticEvent) => {
     if (!emailRef.current || !pwRef.current) return;
     e.preventDefault();
 
-    signInRequest({
+    signIn({
       mail: emailRef.current.value,
       pw: pwRef.current.value,
     })
@@ -48,7 +46,7 @@ const SignInModal = () => {
     <StyledModalWrapper>
       {isError && <Caution>{"잘못된 이메일 또는 비밀번호입니다"}</Caution>}
       <form onSubmit={() => {}} style={{ width: "100%" }}>
-        <StyledSpanText>메일</StyledSpanText>
+        <span style={{ userSelect: "none" }}>메일</span>
         <StyledModalInputWrapper>
           <StyledModalInput
             ref={emailRef}
@@ -58,7 +56,7 @@ const SignInModal = () => {
             onBlur={onBlurInput}
           ></StyledModalInput>
         </StyledModalInputWrapper>
-        <StyledSpanText>비밀번호</StyledSpanText>
+        <span style={{ userSelect: "none" }}>비밀번호</span>
         <StyledModalInputWrapper>
           <StyledModalInput
             ref={pwRef}
@@ -69,7 +67,7 @@ const SignInModal = () => {
             onBlur={onBlurInput}
           ></StyledModalInput>
         </StyledModalInputWrapper>
-        <StyledSignInButton onClick={onSignIn}>로그인</StyledSignInButton>
+        <StyledModalButton onClick={onClickSignIn}>로그인</StyledModalButton>
       </form>
     </StyledModalWrapper>
   );

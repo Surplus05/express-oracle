@@ -5,9 +5,10 @@ import IconButton from "../common/IconButton";
 import ModalBox from "../modal/ModalBox";
 import PostingModal from "../modal/PostingModal";
 
-const BoardHeader = () => {
+const CommunityHeader = () => {
   const [showWriteModal, setShowWriteModal] = useState<boolean>(false);
   const uid = useSelector((state: any) => state.user.USER_ID);
+
   return (
     <>
       <StyledMainTitleWrapper>
@@ -46,4 +47,4 @@ const BoardHeader = () => {
   );
 };
 
-export default BoardHeader;
+export default CommunityHeader;

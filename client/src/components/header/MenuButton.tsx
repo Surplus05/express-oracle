@@ -29,8 +29,6 @@ const StyledMenuLine = styled.span<MenuLineProps>`
 
 const MenuButton = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
-  // isActive에 따라 메뉴를 띄울 필요가 있으므로 Body 에 필요함 -> Redux 에서 쓰자
-
   let lineStyles: string[];
   lineStyles = isActive
     ? [

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import styled from "styled-components";
 import IconButton from "../common/IconButton";
 
-const StyledBoardPagingWrapper = styled.div`
+const StyledPagingWrapper = styled.div`
   user-select: none;
   display: flex;
   justify-content: center;
@@ -12,10 +12,6 @@ const StyledBoardPagingWrapper = styled.div`
   overflow: hidden;
   width: calc(100%);
   box-shadow: rgb(0 0 0 / 10%) 0px 1px 0px 0px inset;
-`;
-
-const StyledPagingWrapper = styled.div`
-  display: flex;
 `;
 
 const Paging = ({
@@ -39,8 +35,8 @@ const Paging = ({
 
   const maxPage = Math.ceil(totalArticles / 24);
   return (
-    <StyledBoardPagingWrapper>
-      <StyledPagingWrapper>
+    <StyledPagingWrapper>
+      <div style={{ display: "flex" }}>
         {pages.map((page) => {
           const style =
             page === currentPage
@@ -65,8 +61,8 @@ const Paging = ({
             <React.Fragment key={page}></React.Fragment>
           );
         })}
-      </StyledPagingWrapper>
-    </StyledBoardPagingWrapper>
+      </div>
+    </StyledPagingWrapper>
   );
 };
 

@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { getDateString } from "../../../common/functions";
+import { CommentType } from "../../../common/types";
 
-const StyledCommentWrapper = styled.div`
+const StyledCommentWrapper = styled.li`
   display: flex;
   align-items: flex-start;
   margin: 0.5em 0;
@@ -19,7 +20,7 @@ const StyledCommentProfileWrapper = styled.div`
   background-color: var(--color--gray--middle);
 `;
 
-const Comment = ({ comment }: { comment: any }) => {
+const Comment = ({ comment }: { comment: CommentType }) => {
   return (
     <StyledCommentWrapper>
       <StyledCommentProfileWrapper>

@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { getDateString } from "../../../common/functions";
+import { PostHeader } from "../../../common/types";
 
-const StyledTitleWrapper = styled.div`
+const StyledPostHeader = styled.div`
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -15,14 +16,12 @@ const StyledTitleWrapper = styled.div`
   box-shadow: rgb(0 0 0 / 10%) 0px -1px 0px 0px inset;
 `;
 
-interface ViewHeaderProps {
-  PUBLISHED: string;
-  TITLE: string;
-  USERNAME: string;
-  VIEWS: number;
-  COMMENTS: number;
-  LIKES: number;
-}
+const StyledPostInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`;
 
 const StyledTitleSpan = styled.span`
   white-space: nowrap;
@@ -35,16 +34,15 @@ const StyledTitleSpan = styled.span`
   }
 `;
 
-const StyledStatSpan = styled.span`
+const StyledPostInformationSpan = styled.span`
   font-size: 0.875em;
   margin-right: 0.75em;
   @media screen and (max-width: 768px) {
     font-size: 0.75em;
   }
 `;
-const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
 
-const StyledStatItemWrapper = styled.div`
+const StyledStatisticItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,49 +54,47 @@ const StyledStatItemWrapper = styled.div`
   }
 `;
 
-const StyledSubWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-`;
-const StyledStatWrapper = styled.div`
+const StyledStatisticWrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const ViewHeader = ({ data }: { data: ViewHeaderProps }) => {
+const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
+
+const ViewHeader = ({ data }: { data: PostHeader }) => {
   let date = new Date(data.PUBLISHED);
   return (
-    <StyledTitleWrapper>
+    <StyledPostHeader>
       <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
-      <StyledSubWrapper>
+      <StyledPostInfoWrapper>
         <div>
-          <StyledStatSpan>
+          <StyledPostInformationSpan>
             <i
               className="fa-solid fa-user"
               style={{ marginRight: "0.5em" }}
             ></i>
             <span style={{ fontWeight: "bold" }}>{data.USERNAME}</span>
-          </StyledStatSpan>
-          <StyledStatSpan>{getDateString(date)}</StyledStatSpan>
+          </StyledPostInformationSpan>
+          <StyledPostInformationSpan>
+            {getDateString(date)}
+          </StyledPostInformationSpan>
         </div>
-        <StyledStatWrapper>
-          <StyledStatItemWrapper>
+        <StyledStatisticWrapper>
+          <StyledStatisticItem>
             <i className="fa-regular fa-eye" style={StatIconStyle}></i>
             {data.VIEWS}
-          </StyledStatItemWrapper>
-          <StyledStatItemWrapper>
+          </StyledStatisticItem>
+          <StyledStatisticItem>
             <i className="fa-regular fa-comment-dots" style={StatIconStyle}></i>
             {data.COMMENTS}
-          </StyledStatItemWrapper>
-          <StyledStatItemWrapper>
+          </StyledStatisticItem>
+          <StyledStatisticItem>
             <i className="fa-regular fa-thumbs-up" style={StatIconStyle}></i>
             {data.LIKES}
-          </StyledStatItemWrapper>
-        </StyledStatWrapper>
-      </StyledSubWrapper>
-    </StyledTitleWrapper>
+          </StyledStatisticItem>
+        </StyledStatisticWrapper>
+      </StyledPostInfoWrapper>
+    </StyledPostHeader>
   );
 };
 

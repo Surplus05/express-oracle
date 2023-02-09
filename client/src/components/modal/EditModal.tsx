@@ -1,17 +1,15 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
 import {
+  StyledModalButton,
   StyledModalInput,
   StyledModalInputWrapper,
   StyledModalWrapper,
-  StyledSignInButton,
-  StyledSpanText,
 } from "../../common/style";
-import { EditPostTypes } from "../../common/types";
+import { EditPost } from "../../common/types";
 import { editPost } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
 
-const PostingModal = ({ title, post, postId }: EditPostTypes) => {
+const PostingModal = ({ title, post, postId }: EditPost) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const postRef = useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,7 +32,7 @@ const PostingModal = ({ title, post, postId }: EditPostTypes) => {
     if (!titleRef.current || !postRef.current) return;
     if (!titleRef.current.value || !postRef.current.value) return;
     setIsLoading(true);
-    const postData: EditPostTypes = {
+    const postData: EditPost = {
       title: titleRef.current.value,
       post: postRef.current.value,
       postId,
@@ -60,7 +58,7 @@ const PostingModal = ({ title, post, postId }: EditPostTypes) => {
           flexDirection: "column",
         }}
       >
-        <StyledSpanText>제목</StyledSpanText>
+        <span style={{ userSelect: "none" }}>제목</span>
         <StyledModalInputWrapper>
           <StyledModalInput
             ref={titleRef}
@@ -69,7 +67,7 @@ const PostingModal = ({ title, post, postId }: EditPostTypes) => {
             onBlur={onBlurInput}
           ></StyledModalInput>
         </StyledModalInputWrapper>
-        <StyledSpanText>본문</StyledSpanText>
+        <span style={{ userSelect: "none" }}>본문</span>
         <StyledModalInputWrapper style={{ height: "100%" }}>
           <textarea
             style={{
@@ -85,9 +83,9 @@ const PostingModal = ({ title, post, postId }: EditPostTypes) => {
             onBlur={onBlurInput}
           ></textarea>
         </StyledModalInputWrapper>
-        <StyledSignInButton style={{ marginTop: "0" }} onClick={postWrite}>
+        <StyledModalButton style={{ marginTop: "0" }} onClick={postWrite}>
           수정
-        </StyledSignInButton>
+        </StyledModalButton>
       </form>
       {isLoading && (
         <div

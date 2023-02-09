@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import ArticleInListType from "../../common/types";
+import { PostType } from "../../common/types";
 
-const StyledArticleItemWrapper = styled.div`
+const StyledPostWrapper = styled.div`
   font-size: 0.75em;
   box-sizing: border-box;
   display: flex;
@@ -27,18 +27,15 @@ const StyledTitleSpan = styled.span`
   white-space: nowrap;
   overflow: hidden;
 `;
-const StyledWUserNameSpan = styled.span`
-  white-space: nowrap;
-`;
 
-const StyledInfoWrapper = styled.div`
+const StyledPostInfoWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   width: 0;
   flex-direction: column;
 `;
 
-const StyledStatWrapper = styled.div`
+const StyledStatisticWrapper = styled.div`
   font-size: 0.75em;
   user-select: none;
   display: flex;
@@ -46,7 +43,7 @@ const StyledStatWrapper = styled.div`
   align-content: center;
 `;
 
-const StyledStatItemWrapper = styled.div`
+const StyledStatisticItem = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0;
@@ -63,36 +60,38 @@ const StyledUserInfoWrapper = styled.div`
 
 const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
 
-const Article = ({ data }: { data: ArticleInListType }) => {
+const Post = ({ data }: { data: PostType }) => {
   const navigate = useNavigate();
-  function onClickArticle() {
+
+  function onClickPost() {
     navigate(`/view?postId=${data.POST_ID}`);
   }
+
   return (
-    <StyledArticleItemWrapper onClick={onClickArticle}>
-      <StyledInfoWrapper>
+    <StyledPostWrapper onClick={onClickPost}>
+      <StyledPostInfoWrapper>
         <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
-        <StyledStatWrapper>
-          <StyledStatItemWrapper>
+        <StyledStatisticWrapper>
+          <StyledStatisticItem>
             <i className="fa-regular fa-eye" style={StatIconStyle}></i>
             {data.VIEWS}
-          </StyledStatItemWrapper>
-          <StyledStatItemWrapper>
+          </StyledStatisticItem>
+          <StyledStatisticItem>
             <i className="fa-regular fa-comment-dots" style={StatIconStyle}></i>
             {data.COMMENTS}
-          </StyledStatItemWrapper>
-          <StyledStatItemWrapper>
+          </StyledStatisticItem>
+          <StyledStatisticItem>
             <i className="fa-regular fa-thumbs-up" style={StatIconStyle}></i>
             {data.LIKES}
-          </StyledStatItemWrapper>
-        </StyledStatWrapper>
-      </StyledInfoWrapper>
+          </StyledStatisticItem>
+        </StyledStatisticWrapper>
+      </StyledPostInfoWrapper>
       <StyledUserInfoWrapper>
         <i className="fa-solid fa-user" style={{ marginRight: "0.5em" }}></i>
-        <StyledWUserNameSpan>{data.USERNAME}</StyledWUserNameSpan>
+        <span style={{ whiteSpace: "nowrap" }}>{data.USERNAME}</span>
       </StyledUserInfoWrapper>
-    </StyledArticleItemWrapper>
+    </StyledPostWrapper>
   );
 };
 
-export default Article;
+export default Post;

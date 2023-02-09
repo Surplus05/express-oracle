@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { postLike } from "../../../service/express";
+import { PostStatistic } from "../../../common/types";
+import { postSocial } from "../../../service/express";
 
 const StyledSocialWrapper = styled.div`
   font-size: 2em;
@@ -38,30 +39,30 @@ const StyledSocialButton = styled.div`
 
 const Social = ({
   postId,
-  like,
-  dislike,
+  statistic,
 }: {
   postId: number;
-  like: number;
-  dislike: number;
+  statistic: PostStatistic;
 }) => {
-  const [likeState, setLikeState] = useState<number>(like);
-  const [dislikeState, setDislikeState] = useState<number>(dislike);
-  const onClickLike = useCallback(() => {
-    postLike(postId, true).then((value) => {
-      setLikeState(value.data.LIKES);
+  const [like, setLike] = useState<number>(statistic.like);
+  const [dislike, setDislike] = useState<number>(statistic.dislike);
+
+  function onClickLike() {
+    postSocial(postId, true).then((value) => {
+      setLike(value.data.LIKES);
     });
-  }, []);
-  const onClickDislike = useCallback(() => {
-    postLike(postId, false).then((value) => {
-      setDislikeState(value.data.DISLIKES);
+  }
+
+  function onClickDislike() {
+    postSocial(postId, false).then((value) => {
+      setDislike(value.data.DISLIKES);
     });
-  }, []);
+  }
 
   return (
     <StyledSocialWrapper>
       <StyledSocialBox>
-        {likeState}
+        {like}
         <StyledSocialButton
           onClick={onClickLike}
           style={{ backgroundColor: "#4080FF", margin: "0 1em" }}
@@ -74,7 +75,7 @@ const Social = ({
         >
           <i className="fa-regular fa-thumbs-down"></i>
         </StyledSocialButton>
-        {dislikeState}
+        {dislike}
       </StyledSocialBox>
     </StyledSocialWrapper>
   );

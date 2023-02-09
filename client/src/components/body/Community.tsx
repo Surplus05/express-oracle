@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { StyledMainContainer } from "../../common/style";
-import ArticleInListType from "../../common/types";
-import { getPageArcitleList } from "../../service/express";
-import Article from "./Article";
-import BoardHeader from "./BoardHeader";
+import { PostType } from "../../common/types";
+import { getPostList } from "../../service/express";
+import CommunityHeader from "./CommunityHeader";
 import Paging from "./Paging";
+import Post from "./Post";
 
-const StyledBoardArticleWrapper = styled.div`
+const StyledPostList = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 100%;
@@ -17,20 +16,19 @@ const StyledBoardArticleWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Board = () => {
-  const navigate = useNavigate();
-  const uid = useSelector((state: any) => state.user.USER_ID);
-
+const Community = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentArticles, setCurrentArticles] = useState<any[]>();
+  const [posts, setPosts] = useState<PostType[]>();
   const [currentPage, setCurrentPage] = useState<number | null>(
     Number(searchParams.get("page")) || null
   );
   const totalArticles = useRef<number>(1);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (currentPage != null) {
-      getPageArcitleList(currentPage).then((value) => {
-        setCurrentArticles(value.data.rows);
+      getPostList(currentPage).then((value) => {
+        setPosts(value.data.rows);
         totalArticles.current = value.data.totalArticles;
       });
     } else {
@@ -41,13 +39,13 @@ const Board = () => {
 
   return (
     <StyledMainContainer>
-      <BoardHeader></BoardHeader>
-      <StyledBoardArticleWrapper>
-        {currentArticles &&
-          currentArticles.map((value: ArticleInListType) => {
-            return <Article key={value.POST_ID} data={value}></Article>;
+      <CommunityHeader></CommunityHeader>
+      <StyledPostList>
+        {posts &&
+          posts.map((value: PostType) => {
+            return <Post key={value.POST_ID} data={value}></Post>;
           })}
-      </StyledBoardArticleWrapper>
+      </StyledPostList>
       {totalArticles.current && currentPage && (
         <Paging
           currentPage={currentPage}
@@ -59,4 +57,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default Community;
