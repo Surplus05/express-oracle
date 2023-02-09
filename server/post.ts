@@ -16,8 +16,8 @@ export async function getPostList(
   try {
     connection = await oracledb.getConnection(dbconfig);
     let countRes = await connection.execute("SELECT COUNT(*) FROM POSTS");
-    let totalArticles = countRes.rows[0]["COUNT(*)"];
-    let pageBindings = totalArticles - (page - 1) * 24;
+    let totalPosts = countRes.rows[0]["COUNT(*)"];
+    let pageBindings = totalPosts - (page - 1) * 24;
     let data = await connection.execute(
       `SELECT * FROM (
         SELECT ROW_NUMBER() OVER (ORDER BY POST_ID) NUM, A.POST_ID, A.WRITER_ID, A.PUBLISHED, A.TITLE, A.VIEWS, A.LIKES, A.COMMENTS, B.USERNAME , B.USER_ID      
@@ -27,7 +27,7 @@ export async function getPostList(
       [pageBindings - 23, pageBindings]
     );
 
-    response.send({ ...data, totalArticles });
+    response.send({ ...data, totalPosts });
   } catch (error) {
     console.log(error);
   } finally {

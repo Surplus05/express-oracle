@@ -20,7 +20,7 @@ const Paging = ({
   totalPosts,
 }: {
   currentPage: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number | null>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   totalPosts: number;
 }) => {
   const pages = [

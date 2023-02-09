@@ -19,12 +19,14 @@ const StyledPostList = styled.div`
 const Community = () => {
   const [searchParams] = useSearchParams();
   const [posts, setPosts] = useState<PostType[]>();
-  const [currentPage, setCurrentPage] = useState<number | null>(
-    Number(searchParams.get("page")) || null
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(searchParams.get("page"))
   );
   const totalPosts = useRef<number>(1);
   const navigate = useNavigate();
 
+  console.log(currentPage);
+  console.log(totalPosts.current);
   useEffect(() => {
     if (currentPage != null) {
       getPostList(currentPage).then((value) => {
