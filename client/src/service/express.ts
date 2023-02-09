@@ -8,7 +8,7 @@ import {
 } from "../common/types";
 
 export async function getPostList(page: number) {
-  return await axios.get("http://localhost:5000/article", {
+  return await axios.get("http://localhost:5000/post", {
     params: {
       page,
     },

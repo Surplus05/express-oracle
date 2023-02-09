@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { MAX_COMMENT_LENGTH } from "../../../common/constant";
-import { UserState } from "../../../common/types";
 import { getComments, writeComment } from "../../../service/express";
 import Comment from "./Comment";
 
@@ -71,6 +70,7 @@ const Comments = ({ postId }: { postId: number }) => {
     getComments(postId).then((value) => {
       setComments(value.data);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onFocusInput(e: React.BaseSyntheticEvent) {

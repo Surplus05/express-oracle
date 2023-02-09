@@ -23,7 +23,7 @@ const SignInModal = () => {
     e.target.parentNode.classList.remove("focusIn");
   }
 
-  const onClickSignIn = async (e: React.BaseSyntheticEvent) => {
+  async function onClickSignIn(e: React.BaseSyntheticEvent) {
     if (!emailRef.current || !pwRef.current) return;
     e.preventDefault();
 
@@ -40,7 +40,7 @@ const SignInModal = () => {
         setIsError(true);
         throw new Error(error);
       });
-  };
+  }
 
   return (
     <StyledModalWrapper>

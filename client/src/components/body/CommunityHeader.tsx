@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { StyledMainTitleWrapper } from "../../common/style";
 import IconButton from "../common/IconButton";

@@ -25,9 +25,10 @@ const PostingModal = ({ title, post, postId }: EditPost) => {
     if (!titleRef.current || !postRef.current) return;
     titleRef.current.value = title;
     postRef.current.value = post;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const postWrite = useCallback((e: React.BaseSyntheticEvent) => {
+  function postWrite(e: React.BaseSyntheticEvent) {
     e.preventDefault();
     if (!titleRef.current || !postRef.current) return;
     if (!titleRef.current.value || !postRef.current.value) return;
@@ -45,7 +46,8 @@ const PostingModal = ({ title, post, postId }: EditPost) => {
       .catch(() => {
         alert("글 수정 실패");
       });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
 
   return (
     <StyledModalWrapper>

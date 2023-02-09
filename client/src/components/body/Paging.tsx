@@ -17,11 +17,11 @@ const StyledPagingWrapper = styled.div`
 const Paging = ({
   currentPage,
   setCurrentPage,
-  totalArticles,
+  totalPosts,
 }: {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number | null>>;
-  totalArticles: number;
+  totalPosts: number;
 }) => {
   const pages = [
     currentPage - 2,
@@ -33,7 +33,7 @@ const Paging = ({
 
   const navigate = useNavigate();
 
-  const maxPage = Math.ceil(totalArticles / 24);
+  const maxPage = Math.ceil(totalPosts / 24);
   return (
     <StyledPagingWrapper>
       <div style={{ display: "flex" }}>

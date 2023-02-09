@@ -1,18 +1,18 @@
 import express, { Request, Response } from "express";
-import { title } from "process";
-import { WritePost } from "../client/src/common/types";
-import GetArticleListTypes, {
-  CommentTypes,
-  EditPostTypes,
-  GetIsDuplicateTypes,
-  SignInTypes,
-  SignUpTypes,
-  SocialTypes,
-} from "./types";
+import { getCommentList, writeComment } from "./comment";
+import { deletePost } from "./delete";
+import { editPost } from "./edit";
+import { getPostList } from "./post";
+import { signIn } from "./signin";
+import { checkDuplicate, signUp } from "./signup";
+import { socialInteraciton } from "./social";
+import { getPost } from "./view";
+import { writePost } from "./write";
 const app = express();
 const oracledb = require("oracledb");
+const whitelist = ["http://localhost:3000"];
 
-const dbconfig = {
+export const dbconfig = {
   user: "C##Surplus",
   password: "1005",
   connectString: "localhost:1521/xe",
@@ -33,405 +33,51 @@ app.listen("5000", () => {
 
 app.use(express.text());
 
-app
-  .route("/article")
-  .get(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    const params: GetArticleListTypes = {
-      page: Number(request.query.page) || 1,
-    };
-    await getPageArcitleList(params, response);
-  });
-
-app.route("/view").get(async function (request: Request, response: Response) {
-  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  let postId = Number(request.query.postId);
-  if (postId != null) {
-    await getArticle(postId, response);
-  } else {
-    response.status(404);
-    response.send();
-  }
+app.route("/post").get((request: Request, response: Response) => {
+  getPostList(request, response, oracledb, dbconfig, whitelist);
 });
 
-app.route("/social").get(async function (request: Request, response: Response) {
-  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  const data: SocialTypes = {
-    postId: Number(request.query.postId),
-    like: request.query.like === "true" ? true : false,
-  };
-  if (data.postId != null) {
-    await socialLike(data, response);
-  } else {
-    response.status(404);
-    response.send();
-  }
+app.route("/view").get((request: Request, response: Response) => {
+  getPost(request, response, oracledb, dbconfig, whitelist);
 });
+
+app.route("/social").get((request: Request, response: Response) => {
+  socialInteraciton(request, response, oracledb, dbconfig, whitelist);
+});
+
 app
   .route("/comments")
-  .get(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    const postId: number = Number(request.query.postId);
-    if (postId != null) {
-      await getComments(postId, response);
-    } else {
-      response.status(404);
-      response.send();
-    }
+  .get((request: Request, response: Response) => {
+    getCommentList(request, response, oracledb, dbconfig, whitelist);
   })
-  .post(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    await postComments(JSON.parse(request.body), response);
+  .post((request: Request, response: Response) => {
+    writeComment(request, response, oracledb, dbconfig, whitelist);
   });
 
 app
   .route("/signup")
-  .get(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    const params: GetIsDuplicateTypes = request.query;
-    await getIsDuplicate(params, response);
+  .get((request: Request, response: Response) => {
+    checkDuplicate(request, response, oracledb, dbconfig, whitelist);
   })
-  .post(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    await postSignUp(JSON.parse(request.body), response);
+  .post((request: Request, response: Response) => {
+    signUp(request, response, oracledb, dbconfig, whitelist);
   });
 
-app
-  .route("/signin")
-  .post(async function (request: Request, response: Response) {
-    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    let userInfo = await postSignIn(JSON.parse(request.body), response);
-
-    if (userInfo.rows.length) {
-      response.send(userInfo);
-    } else {
-      response.status(401);
-      response.send();
-    }
-  });
-
-app.route("/write").post(async function (request: Request, response: Response) {
-  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  await postWritePost(JSON.parse(request.body), response);
+app.route("/signin").post((request: Request, response: Response) => {
+  signIn(request, response, oracledb, dbconfig, whitelist);
 });
 
-app.route("/edit").post(async function (request: Request, response: Response) {
-  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  await editPost(JSON.parse(request.body), response);
-});
-app.route("/delete").get(async function (request: Request, response: Response) {
-  response.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  let postId = Number(request.query.postId);
-  if (postId != null) {
-    await deletePost(postId, response);
-  } else {
-    response.status(404);
-    response.send();
-  }
+app.route("/write").post((request: Request, response: Response) => {
+  writePost(request, response, oracledb, dbconfig, whitelist);
 });
 
-async function getPageArcitleList(
-  params: GetArticleListTypes,
-  response: Response
-) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    let countRes = await connection.execute("SELECT COUNT(*) FROM POSTS");
-    let totalArticles = countRes.rows[0]["COUNT(*)"];
-    let pageBindings = totalArticles - (params.page - 1) * 24;
-    let data = await connection.execute(
-      `SELECT * FROM (
-        SELECT ROW_NUMBER() OVER (ORDER BY POST_ID) NUM, A.POST_ID, A.WRITER_ID, A.PUBLISHED, A.TITLE, A.VIEWS, A.LIKES, A.COMMENTS, B.USERNAME , B.USER_ID      
-        FROM POSTS A INNER JOIN USER_INFO B ON A.WRITER_ID = B.USER_ID
-        ORDER BY POST_ID DESC )
-    WHERE NUM BETWEEN (:bv1) AND (:bv2)`,
-      [pageBindings - 23, pageBindings]
-    );
+app.route("/edit").post((request: Request, response: Response) => {
+  editPost(request, response, oracledb, dbconfig, whitelist);
+});
 
-    response.send({ ...data, totalArticles });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function getArticle(pageId: number, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    await connection.execute(
-      `UPDATE POSTS SET VIEWS = VIEWS + 1 WHERE POST_ID = ${pageId}`
-    );
-    connection.commit();
-    let data = await connection.execute(
-      `SELECT A.POST_ID, A.WRITER_ID, A.POST, A.PUBLISHED, A.TITLE, A.VIEWS, A.LIKES, A.DISLIKES, A.COMMENTS, B.USERNAME , B.USER_ID      
-      FROM POSTS A INNER JOIN USER_INFO B ON A.WRITER_ID = B.USER_ID WHERE A.POST_ID = ${pageId}
-      `,
-      []
-    );
-    response.send(data.rows[0]);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function editPost(data: EditPostTypes, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    await connection.execute(
-      `UPDATE POSTS SET TITLE = '${data.title}', POST = '${data.post}' WHERE POST_ID = ${data.postId}`,
-      []
-    );
-    connection.commit();
-    response.send(true);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function deletePost(pageId: number, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    await connection.execute(
-      `DELETE FROM COMMENTS WHERE POST_ID = ${pageId}`,
-      []
-    );
-    await connection.execute(`DELETE FROM POSTS WHERE POST_ID = ${pageId}`, []);
-    connection.commit();
-    response.send(true);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function getComments(pageId: number, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    let data = await connection.execute(
-      `SELECT A.COMMENT_ID, A.POST_ID, A.WRITER_ID, A.COMMENT_TEXT, A.PUBLISHED, B.POST_ID, C.USER_ID, C.USERNAME   
-      FROM COMMENTS A INNER JOIN POSTS B ON A.POST_ID = B.POST_ID INNER JOIN USER_INFO C ON A.WRITER_ID = C.USER_ID WHERE B.POST_ID = ${pageId} ORDER BY A.PUBLISHED ASC`,
-      []
-    );
-    response.send(data.rows);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function postComments(data: CommentTypes, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    connection.execute(`INSERT INTO COMMENTS VALUES(COMMENTS_SEQ.NEXTVAL, ${data.postId}, ${data.userId}, '${data.text}', sysdate)
-    `);
-    connection.execute(
-      `UPDATE POSTS SET COMMENTS = COMMENTS + 1 WHERE POST_ID = ${data.postId}`
-    );
-    connection.commit();
-    response.send(true);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function socialLike(data: SocialTypes, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    let likeString = data.like ? "LIKES" : "DISLIKES";
-    await connection.execute(
-      `UPDATE POSTS SET ${likeString} = ${likeString} + 1 WHERE POST_ID = ${data.postId}`
-    );
-    connection.commit();
-    let social = await connection.execute(
-      `SELECT ${likeString} FROM POSTS WHERE POST_ID = ${data.postId}`
-    );
-    response.send(social.rows[0]);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function getIsDuplicate(params: GetIsDuplicateTypes, response: Response) {
-  let connection;
-  let columnName: string;
-  let data: string;
-  if (params.email != null && params.username == null) {
-    columnName = "MAIL";
-    data = params.email;
-  } else if (params.email == null && params.username != null) {
-    columnName = "USERNAME";
-    data = params.username;
-  } else {
-    throw new Error("Wrong parameter");
-  }
-
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    let isDuplicate = await connection.execute(
-      `SELECT COUNT(*) FROM USER_INFO WHERE ${columnName} = '${data}'`
-    );
-    response.send(isDuplicate.rows[0]);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function postSignUp(data: SignUpTypes, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    await connection.execute(
-      `INSERT INTO USER_INFO VALUES(USER_INFO_SEQ.NEXTVAL, '${data.username}', '${data.mail}', '${data.pw}', sysdate)`
-    );
-    await connection.commit();
-    response.send(true);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function postSignIn(data: SignInTypes, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    let userInfo = await connection.execute(
-      `SELECT USER_INFO.USER_ID FROM USER_INFO WHERE MAIL='${data.mail}' AND PW = '${data.pw}'`
-    );
-
-    return userInfo;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-async function postWritePost(data: WritePost, response: Response) {
-  let connection;
-  try {
-    connection = await oracledb.getConnection(dbconfig);
-    await connection.execute(
-      `INSERT INTO POSTS VALUES(POSTS_SEQ.NEXTVAL, ${data.writerId}, '${data.post}', sysdate, '${data.title}', 0, 0, 0, 0)`
-    );
-    connection.commit();
-    response.send(true);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-}
-
-// sample
-// async function run(request: Request, response: Response) {
-//   let connection;
-//   try {
-//     connection = await oracledb.getConnection(dbconfig);
-//     response.send(
-//       await connection.execute(`SELECT * FROM posts WHERE POST_ID = (:bi)`, [2])
-//     );
-//     // Binding -> Query 문 내부의 변수 느낌인듯
-//     // https://node-oracledb.readthedocs.io/en/latest/user_guide/bind.html#bind
-//   } catch (error) {
-//     console.log(error);
-//   } finally {
-//     if (connection) {
-//       try {
-//         await connection.close();
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//   }
-// }
+app.route("/delete").get((request: Request, response: Response) => {
+  deletePost(request, response, oracledb, dbconfig, whitelist);
+});
 
 // 문제점1.
 // 오류나서 살펴보니 ORACLE 에서는 LIMIT이 안먹힌다.

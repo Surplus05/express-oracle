@@ -17,24 +17,25 @@ const StyledPostList = styled.div`
 `;
 
 const Community = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [posts, setPosts] = useState<PostType[]>();
   const [currentPage, setCurrentPage] = useState<number | null>(
     Number(searchParams.get("page")) || null
   );
-  const totalArticles = useRef<number>(1);
+  const totalPosts = useRef<number>(1);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (currentPage != null) {
       getPostList(currentPage).then((value) => {
         setPosts(value.data.rows);
-        totalArticles.current = value.data.totalArticles;
+        totalPosts.current = value.data.totalPosts;
       });
     } else {
       setCurrentPage(1);
       navigate("/main?page=1");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   return (
@@ -46,11 +47,11 @@ const Community = () => {
             return <Post key={value.POST_ID} data={value}></Post>;
           })}
       </StyledPostList>
-      {totalArticles.current && currentPage && (
+      {totalPosts.current && currentPage && (
         <Paging
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          totalArticles={totalArticles.current}
+          totalPosts={totalPosts.current}
         ></Paging>
       )}
     </StyledMainContainer>

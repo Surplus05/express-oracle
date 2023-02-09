@@ -1,33 +1,37 @@
-export default interface GetArticleListTypes {
-  page: number;
-}
-
-export interface GetIsDuplicateTypes {
+export interface UserInfo {
   email?: string;
   username?: string;
 }
 
-export interface SignInTypes {
+export interface SignInInfo {
   mail: string;
   pw: string;
 }
-export interface SignUpTypes extends SignInTypes {
+
+export interface SignUpInfo extends SignInInfo {
   username: string;
 }
 
-export interface SocialTypes {
-  postId: number;
-  like: boolean;
-}
-
-export interface CommentTypes {
+export interface Comment {
   postId: number;
   userId: number;
   text: string;
 }
 
-export interface EditPostTypes {
+export interface EditPost {
   title: string;
   post: string;
   postId: number;
+}
+
+export interface DBConfig {
+  user: string;
+  password: string;
+  connectString: string;
+}
+
+export interface WritePost {
+  writerId: number;
+  title: string;
+  post: string;
 }

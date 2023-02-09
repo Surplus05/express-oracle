@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import {
+  StyledModalButton,
   StyledModalInput,
   StyledModalInputWrapper,
   StyledModalWrapper,
@@ -8,7 +9,7 @@ import {
 import { checkDuplicate, signUp } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
 
-const StyledModalButton = styled.button`
+const StyledModalSubButton = styled.button`
   border: none;
   cursor: pointer;
   background-color: var(--color--main);
@@ -32,15 +33,16 @@ const SignUpModal = () => {
   const [usernameDuplicated, setUsernameDuplicated] = useState<boolean>(true);
   const [pwConstraint, setPwConstraint] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const onFocusInput = useCallback((e: React.BaseSyntheticEvent) => {
+
+  function onFocusInput(e: React.BaseSyntheticEvent) {
     (e.target.parentNode as HTMLDivElement).style.border = "";
     e.target.parentNode.classList.add("focusIn");
-  }, []);
+  }
 
-  const onBlurInput = useCallback((e: React.BaseSyntheticEvent) => {
+  function onBlurInput(e: React.BaseSyntheticEvent) {
     (e.target.parentNode as HTMLDivElement).style.border = "";
     e.target.parentNode.classList.remove("focusIn");
-  }, []);
+  }
 
   const dupCheck = useCallback(
     (e: React.BaseSyntheticEvent) => {
@@ -127,7 +129,9 @@ const SignUpModal = () => {
             ></StyledModalInput>
           </StyledModalInputWrapper>
           {emailDuplicated ? (
-            <StyledModalButton onClick={dupCheck}>중복확인</StyledModalButton>
+            <StyledModalSubButton onClick={dupCheck}>
+              중복확인
+            </StyledModalSubButton>
           ) : (
             <i
               className="fa-solid fa-check"
@@ -194,7 +198,9 @@ const SignUpModal = () => {
             ></StyledModalInput>
           </StyledModalInputWrapper>
           {usernameDuplicated ? (
-            <StyledModalButton onClick={dupCheck}>중복확인</StyledModalButton>
+            <StyledModalSubButton onClick={dupCheck}>
+              중복확인
+            </StyledModalSubButton>
           ) : (
             <i
               className="fa-solid fa-check"

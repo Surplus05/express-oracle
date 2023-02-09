@@ -37,60 +37,59 @@ const StyledControlButton = styled.div`
 const View = () => {
   const uid = useSelector((state: any) => state.user.USER_ID);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [currentArticle, setCurrentArticle] = useState<PostType>();
+  const [currentPost, setCurrentPost] = useState<PostType>();
 
   useEffect(() => {
     const postId = searchParams.get("postId");
     if (postId != null) {
       getPost(Number(postId)).then((value: any) => {
-        setCurrentArticle(value.data);
+        setCurrentPost(value.data);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onClickDelete() {
-    if (currentArticle != null)
-      deletePost(currentArticle.POST_ID).then(() => {
+    if (currentPost != null)
+      deletePost(currentPost.POST_ID).then(() => {
         navigate("/main?page=1");
       });
   }
 
-  if (currentArticle == null) return <></>;
+  if (currentPost == null) return <StyledMainContainer></StyledMainContainer>;
   return (
     <>
       <StyledMainContainer>
         <ViewHeader
           data={{
-            PUBLISHED: currentArticle.PUBLISHED,
-            TITLE: currentArticle.TITLE,
-            USERNAME: currentArticle.USERNAME,
-            VIEWS: currentArticle.VIEWS,
-            COMMENTS: currentArticle.COMMENTS,
-            LIKES: currentArticle.LIKES,
+            PUBLISHED: currentPost.PUBLISHED,
+            TITLE: currentPost.TITLE,
+            USERNAME: currentPost.USERNAME,
+            VIEWS: currentPost.VIEWS,
+            COMMENTS: currentPost.COMMENTS,
+            LIKES: currentPost.LIKES,
           }}
         ></ViewHeader>
         <StyledMainTextWrapper>
-          {currentArticle.POST.split("\n").map(
-            (line: string, index: number) => {
-              return (
-                <span key={index}>
-                  {line}
-                  <br />
-                </span>
-              );
-            }
-          )}
+          {currentPost.POST.split("\n").map((line: string, index: number) => {
+            return (
+              <span key={index}>
+                {line}
+                <br />
+              </span>
+            );
+          })}
         </StyledMainTextWrapper>
         <Social
-          postId={currentArticle.POST_ID}
+          postId={currentPost.POST_ID}
           statistic={{
-            like: currentArticle.LIKES,
-            dislike: currentArticle.DISLIKES,
+            like: currentPost.LIKES,
+            dislike: currentPost.DISLIKES,
           }}
         ></Social>
-        <Comments postId={currentArticle.POST_ID}></Comments>
+        <Comments postId={currentPost.POST_ID}></Comments>
         <StyledButtonList>
           <StyledControlButton
             onClick={() => {
@@ -99,7 +98,7 @@ const View = () => {
           >
             목록 보기
           </StyledControlButton>
-          {uid === currentArticle.USER_ID && (
+          {uid === currentPost.USER_ID && (
             <div style={{ display: "flex" }}>
               <StyledControlButton
                 style={{ marginRight: "1em" }}
@@ -127,9 +126,9 @@ const View = () => {
           }}
         >
           <EditModal
-            title={currentArticle.TITLE}
-            post={currentArticle.POST}
-            postId={currentArticle.POST_ID}
+            title={currentPost.TITLE}
+            post={currentPost.POST}
+            postId={currentPost.POST_ID}
           />
         </ModalBox>
       )}
