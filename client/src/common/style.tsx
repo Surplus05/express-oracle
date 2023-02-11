@@ -104,7 +104,7 @@ export const StyledMainContainer = styled.div`
   border-radius: var(--border--radius);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   background-color: #fff;
   width: calc(100% - 13em);

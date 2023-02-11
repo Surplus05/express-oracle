@@ -2,12 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import IconButton from "../common/IconButton";
 
-const StyledModalWrapper = styled.div`
+interface ModalWrapperProps {
+  top?: string;
+}
+
+const StyledModalWrapper = styled.div<ModalWrapperProps>`
   position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 0;
+  top: ${({ top }) => {
+    return top ? top : "0";
+  }};
   left: 0;
   width: 100vw;
   height: 100vh;
@@ -41,10 +47,12 @@ const ModalBox = ({
   title,
   children,
   hideModal,
+  top,
 }: {
   title: string;
   children: React.ReactNode;
   hideModal: Function;
+  top?: string;
 }) => {
   function onClickOutside(e: React.BaseSyntheticEvent) {
     if (e.target.classList.contains("outside")) {
@@ -52,7 +60,11 @@ const ModalBox = ({
     }
   }
   return (
-    <StyledModalWrapper className="outside" onMouseDown={onClickOutside}>
+    <StyledModalWrapper
+      top={top}
+      className="outside"
+      onMouseDown={onClickOutside}
+    >
       <StyledModal>
         <StyledModalTitle>
           {title}

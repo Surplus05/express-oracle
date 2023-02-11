@@ -1,9 +1,48 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import MobileMenu from "./MobileMenu";
 
 interface MenuLineProps {
   customStyles: string;
 }
+
+interface MobileMenuProps {
+  isActive: boolean;
+}
+
+const MobileMenuFadeIn = keyframes`
+  0% {
+    transform: translate(100%, 0%);
+  }
+  100% {
+    transform: translate(0%, 0%);
+  }
+`;
+const MobileMenuFadeOut = keyframes`
+  0% {
+    transform: translate(0%, 0%);
+  }
+  100% {
+    transform: translate(100%, 0%);
+  }
+`;
+
+const StyledMobileMenu = styled.div<MobileMenuProps>`
+  position: absolute;
+  width: 100vw;
+  top: 3.5em;
+  height: calc(100vh - 3.5em);
+  left: 0;
+  background-color: var(--color--shadow);
+
+  transition: 0.3s;
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+  transform: ${({ isActive }) => {
+    return isActive ? "translateX(0%)" : "translateX(100%)";
+  }};
+`;
 
 const StyledMenuWrapper = styled.div`
   width: 1.5em;
@@ -43,17 +82,26 @@ const MenuButton = () => {
       ];
 
   return (
-    <StyledMenuWrapper
-      onClick={() => {
-        setIsActive(!isActive);
-      }}
-    >
-      {lineStyles.map((lineStyle, index) => {
-        return (
-          <StyledMenuLine key={index} customStyles={lineStyle}></StyledMenuLine>
-        );
-      })}
-    </StyledMenuWrapper>
+    <>
+      <StyledMenuWrapper
+        className="MobileMenu"
+        onClick={() => {
+          setIsActive(!isActive);
+        }}
+      >
+        {lineStyles.map((lineStyle, index) => {
+          return (
+            <StyledMenuLine
+              key={index}
+              customStyles={lineStyle}
+            ></StyledMenuLine>
+          );
+        })}
+      </StyledMenuWrapper>
+      <StyledMobileMenu isActive={isActive}>
+        <MobileMenu />
+      </StyledMobileMenu>
+    </>
   );
 };
 

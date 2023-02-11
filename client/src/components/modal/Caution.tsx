@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const StyledCautionWrapper = styled.div`
   display: flex;
+  user-select: none;
   align-items: center;
   flex-direction: row;
   background-color: #f24d34;

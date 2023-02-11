@@ -28,6 +28,7 @@ const StyledPostWrapper = styled.div`
 `;
 
 const StyledTitleSpan = styled.span`
+  display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -83,7 +84,13 @@ const Post = ({ data }: { data: PostType }) => {
   return (
     <StyledPostWrapper onClick={onClickPost}>
       <StyledPostInfoWrapper>
-        <div style={{ flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
           {new Date().getTime() - new Date(data.PUBLISHED).getTime() <
             DAY_TO_MILLISECONDS && (
             <StyledPostTag

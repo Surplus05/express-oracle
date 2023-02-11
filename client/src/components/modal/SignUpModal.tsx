@@ -77,9 +77,7 @@ const SignUpModal = () => {
 
   const onPwChange = useCallback(() => {
     if (!pwRef.current) return;
-    if (pwRef.current.value.length >= 8) {
-      setPwConstraint(true);
-    }
+    setPwConstraint(pwRef.current.value.length >= 8);
   }, [pwRef]);
 
   const onClickRegister = useCallback((e: React.BaseSyntheticEvent) => {
@@ -104,7 +102,7 @@ const SignUpModal = () => {
     <StyledModalWrapper>
       <Caution>
         {
-          "기능 시연용으로 만들었기에 암호화가 이루어지지 않으며 탈퇴도 불가능합니다. 실제 이메일과 비밀번호를 입력하지 마세요."
+          "암호화가 이루어지지 않으며 탈퇴도 불가능합니다. 실제 이메일과 비밀번호를 입력하지 마세요."
         }
       </Caution>
       <form style={{ width: "100%" }}>

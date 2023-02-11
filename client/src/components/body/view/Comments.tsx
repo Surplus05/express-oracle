@@ -9,6 +9,7 @@ const StyledCommentListWrapper = styled.div`
   margin: 0.75em;
   width: calc(100% - 1.5em);
   min-height: 14em;
+  flex-grow: 1;
 `;
 
 const StyledCommentInputWrapper = styled.div`
@@ -58,6 +59,7 @@ const StyledEmptyComment = styled.div`
   align-items: center;
   margin: 0.75em;
   width: calc(100% - 1.5em);
+  flex-grow: 1;
   min-height: 14em;
 `;
 
@@ -101,7 +103,8 @@ const Comments = ({ postId }: { postId: number }) => {
     }
   }
 
-  if (comments == null) return <></>;
+  if (comments == null)
+    return <StyledCommentListWrapper></StyledCommentListWrapper>;
   return (
     <>
       {comments.length > 0 ? (
