@@ -47,15 +47,12 @@ const Social = ({
   const [like, setLike] = useState<number>(statistic.like);
   const [dislike, setDislike] = useState<number>(statistic.dislike);
 
-  function onClickLike() {
-    postSocial(postId, true).then((value) => {
-      setLike(value.data.LIKES);
-    });
-  }
-
-  function onClickDislike() {
-    postSocial(postId, false).then((value) => {
-      setDislike(value.data.DISLIKES);
+  function onClickSocial(type: boolean) {
+    const setSocial = type ? setLike : setDislike;
+    postSocial(postId, type).then((value) => {
+      value.data.LIKES
+        ? setSocial(value.data.LIKES)
+        : setSocial(value.data.DISLIKES);
     });
   }
 
@@ -64,13 +61,17 @@ const Social = ({
       <StyledSocialBox>
         {like}
         <StyledSocialButton
-          onClick={onClickLike}
+          onClick={() => {
+            onClickSocial(true);
+          }}
           style={{ backgroundColor: "#4080FF", margin: "0 1em" }}
         >
           <i className="fa-regular fa-thumbs-up"></i>
         </StyledSocialButton>
         <StyledSocialButton
-          onClick={onClickDislike}
+          onClick={() => {
+            onClickSocial(false);
+          }}
           style={{ backgroundColor: "#F25268", marginRight: "1em" }}
         >
           <i className="fa-regular fa-thumbs-down"></i>

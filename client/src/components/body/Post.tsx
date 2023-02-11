@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import { DAY_TO_MILLISECONDS } from "../../common/constant";
 import { PostType } from "../../common/types";
 
 const StyledPostWrapper = styled.div`
-  font-size: 0.75em;
+  font-size: 0.875em;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-start;
@@ -14,11 +15,15 @@ const StyledPostWrapper = styled.div`
   margin: 0 0.75em;
   padding: 0 0.75em;
   border-radius: var(--border--radius);
-  height: 3.36em;
+  min-height: 3.36em;
   cursor: pointer;
   :hover {
     background-color: var(--color--main);
     color: #fff;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.75em;
   }
 `;
 
@@ -58,6 +63,14 @@ const StyledUserInfoWrapper = styled.div`
   align-items: center;
 `;
 
+const StyledPostTag = styled.div`
+  font-weight: bold;
+  font-size: 0.75em;
+  margin-right: 0.5em;
+  border-radius: var(--border--radius);
+  display: inline-block;
+`;
+
 const StatIconStyle = { lineHeight: "1.6em", marginRight: "0.5em" };
 
 const Post = ({ data }: { data: PostType }) => {
@@ -70,7 +83,32 @@ const Post = ({ data }: { data: PostType }) => {
   return (
     <StyledPostWrapper onClick={onClickPost}>
       <StyledPostInfoWrapper>
-        <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
+        <div style={{ flexDirection: "row" }}>
+          {new Date().getTime() - new Date(data.PUBLISHED).getTime() <
+            DAY_TO_MILLISECONDS && (
+            <StyledPostTag
+              style={{
+                padding: "0 0.5em",
+                color: "rgb(74, 216, 113)",
+                backgroundColor: "rgba(74, 216, 113, 0.15)",
+              }}
+            >
+              NEW
+            </StyledPostTag>
+          )}
+          {data.LIKES >= 10 && (
+            <StyledPostTag
+              style={{
+                padding: "0 0.5em",
+                color: "rgb(216, 74, 74)",
+                backgroundColor: "rgba(216, 74, 74, 0.15)",
+              }}
+            >
+              HOT
+            </StyledPostTag>
+          )}
+          <StyledTitleSpan>{data.TITLE}</StyledTitleSpan>
+        </div>
         <StyledStatisticWrapper>
           <StyledStatisticItem>
             <i className="fa-regular fa-eye" style={StatIconStyle}></i>

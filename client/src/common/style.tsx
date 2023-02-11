@@ -101,6 +101,7 @@ export const StyledModalButton = styled.button`
 `;
 
 export const StyledMainContainer = styled.div`
+  border-radius: var(--border--radius);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

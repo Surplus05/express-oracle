@@ -25,8 +25,6 @@ const Community = () => {
   const totalPosts = useRef<number>(1);
   const navigate = useNavigate();
 
-  console.log(currentPage);
-  console.log(totalPosts.current);
   useEffect(() => {
     if (currentPage != null) {
       getPostList(currentPage).then((value) => {

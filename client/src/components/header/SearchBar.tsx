@@ -13,7 +13,7 @@ const StyledSearchBarWrapper = styled.div`
   border-radius: 2em;
   margin: 0 1em;
   @media (max-width: 768px) {
-    margin: 0 1em 0 0;
+    margin: 0 1em;
   }
 `;
 

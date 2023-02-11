@@ -1,1 +1,3 @@
 export const MAX_COMMENT_LENGTH = 500;
+
+export const DAY_TO_MILLISECONDS = 86400000;

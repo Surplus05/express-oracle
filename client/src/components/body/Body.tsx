@@ -12,6 +12,7 @@ const StyledBodyWrapper = styled.div`
 `;
 
 const StyledBodyCommonAdsWrapper = styled.div`
+  border-radius: var(--border--radius);
   display: flex;
   justify-content: center;
   align-items: center;

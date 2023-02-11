@@ -8,6 +8,7 @@ import {
 } from "../../common/style";
 import { checkDuplicate, signUp } from "../../service/express";
 import Loadingcircle from "../common/LoadingCircle";
+import Caution from "./Caution";
 
 const StyledModalSubButton = styled.button`
   border: none;
@@ -47,40 +48,29 @@ const SignUpModal = () => {
   const dupCheck = useCallback(
     (e: React.BaseSyntheticEvent) => {
       e.preventDefault();
-      if (e.target.parentNode.classList.contains("email")) {
-        if (emailRef.current && emailRef.current.value !== "")
-          checkDuplicate("email", emailRef.current.value).then((value) => {
-            if (value.data["COUNT(*)"] === 0) {
-              setEmailDuplicated(false);
-              (
-                emailRef.current!.parentNode as HTMLDivElement
-              ).style.background = "var(--color--gray--middle)";
-            } else {
-              setEmailDuplicated(true);
-              (emailRef.current!.parentNode as HTMLDivElement).style.border =
-                "1px solid red";
-            }
-          });
-      } else if (e.target.parentNode.classList.contains("username")) {
-        if (usernameRef.current && usernameRef.current.value !== "")
-          checkDuplicate("username", usernameRef.current.value).then(
-            (value) => {
-              if (value.data["COUNT(*)"] === 0) {
-                setUsernameDuplicated(false);
-                (
-                  usernameRef.current!.parentNode as HTMLDivElement
-                ).style.background = "var(--color--gray--middle)";
-              } else {
-                setUsernameDuplicated(true);
-                (
-                  usernameRef.current!.parentNode as HTMLDivElement
-                ).style.border = "1px solid red";
-              }
-            }
-          );
-      } else {
-        throw new Error("unknown target error");
+      const isEmail = e.target.parentNode.classList.contains("email");
+      const ref = isEmail ? emailRef : usernameRef;
+      const setDuplicated = isEmail
+        ? setEmailDuplicated
+        : setUsernameDuplicated;
+
+      if (!ref.current || ref.current.value === "") {
+        return;
       }
+      const target = ref.current.parentNode;
+
+      checkDuplicate(isEmail ? "email" : "username", ref.current.value).then(
+        (value) => {
+          const isDuplicated = value.data["COUNT(*)"] !== 0;
+          setDuplicated(isDuplicated);
+          if (isDuplicated) {
+            (target! as HTMLDivElement).style.border = "1px solid red";
+          } else {
+            (target! as HTMLDivElement).style.background =
+              "var(--color--gray--middle)";
+          }
+        }
+      );
     },
     [emailRef, usernameRef]
   );
@@ -101,20 +91,22 @@ const SignUpModal = () => {
       pw: pwRef.current.value,
       username: usernameRef.current.value,
     }).then((response) => {
-      if (response.data) {
-        alert("가입이 완료되었습니다.");
-        // eslint-disable-next-line no-restricted-globals
-        location.reload();
-      } else {
-        alert("가입이 실패했습니다.");
-        // eslint-disable-next-line no-restricted-globals
-        location.reload();
-      }
+      const alertString = response.data
+        ? "가입이 완료되었습니다."
+        : "가입이 실패했습니다.";
+      alert(alertString);
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
     });
   }, []);
 
   return (
     <StyledModalWrapper>
+      <Caution>
+        {
+          "기능 시연용으로 만들었기에 암호화가 이루어지지 않으며 탈퇴도 불가능합니다. 실제 이메일과 비밀번호를 입력하지 마세요."
+        }
+      </Caution>
       <form style={{ width: "100%" }}>
         <span style={{ userSelect: "none" }}>메일</span>
         <StyledCheckWrapper className="email">
