@@ -24,7 +24,7 @@ const Header = () => {
       <StyledInnerLayoutWrapper>
         <img
           onClick={() => {
-            navigate(`${process.env.PUBLIC_URL}/main?page=1`);
+            navigate(`/main?page=1`);
           }}
           style={{
             margin: "0.5em 0",

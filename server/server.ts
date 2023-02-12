@@ -10,7 +10,11 @@ import { getPost } from "./view";
 import { writePost } from "./write";
 const app = express();
 const oracledb = require("oracledb");
-const whitelist = ["http://localhost:3000", "http://192.168.55.90:3000"];
+const whitelist = [
+  "http://localhost:3000",
+  "http://192.168.55.90:3000",
+  "https://surplus05.github.io",
+];
 
 export const dbconfig = {
   user: "C##Surplus",

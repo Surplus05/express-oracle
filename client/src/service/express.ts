@@ -8,32 +8,41 @@ import {
 } from "../common/types";
 
 export async function getPostList(page: number) {
-  return await axios.get("http://localhost:5000/post", {
-    params: {
-      page,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
+    {
+      params: {
+        page,
+      },
+    }
+  );
 }
 
 export async function getPost(postId: number) {
-  return await axios.get("http://localhost:5000/view", {
-    params: {
-      postId,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/view`,
+    {
+      params: {
+        postId,
+      },
+    }
+  );
 }
 
 export async function checkDuplicate(column: string, data: string) {
-  return await axios.get("http://localhost:5000/signup", {
-    params: {
-      [`${column}`]: data,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signup`,
+    {
+      params: {
+        [`${column}`]: data,
+      },
+    }
+  );
 }
 
 export async function signUp(data: SignUp) {
   return await axios.post(
-    "http://localhost:5000/signup",
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signup`,
     JSON.stringify(data),
     {
       headers: {
@@ -45,7 +54,7 @@ export async function signUp(data: SignUp) {
 
 export async function signIn(data: SignIn) {
   return await axios.post(
-    "http://localhost:5000/signin",
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signin`,
     JSON.stringify(data),
     {
       headers: {
@@ -56,48 +65,65 @@ export async function signIn(data: SignIn) {
 }
 
 export async function writePost(data: WritePost) {
-  return await axios.post("http://localhost:5000/write", JSON.stringify(data), {
-    headers: {
-      "Content-Type": "text/plain",
-    },
-  });
+  return await axios.post(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/write`,
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
 }
 
 export async function editPost(data: EditPost) {
-  return await axios.post("http://localhost:5000/edit", JSON.stringify(data), {
-    headers: {
-      "Content-Type": "text/plain",
-    },
-  });
+  return await axios.post(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/edit`,
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
 }
 
 export async function deletePost(postId: number) {
-  return await axios.get("http://localhost:5000/delete", {
-    params: {
-      postId,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/delete`,
+    {
+      params: {
+        postId,
+      },
+    }
+  );
 }
 
 export async function postSocial(postId: number, like: boolean) {
-  return await axios.get("http://localhost:5000/social", {
-    params: {
-      postId,
-      like,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/social`,
+    {
+      params: {
+        postId,
+        like,
+      },
+    }
+  );
 }
 
 export async function getComments(postId: number) {
-  return await axios.get("http://localhost:5000/comments", {
-    params: {
-      postId,
-    },
-  });
+  return await axios.get(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/comments`,
+    {
+      params: {
+        postId,
+      },
+    }
+  );
 }
 export async function writeComment(data: WriteComment) {
   return await axios.post(
-    "http://localhost:5000/comments",
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/comments`,
     JSON.stringify(data),
     {
       headers: {
