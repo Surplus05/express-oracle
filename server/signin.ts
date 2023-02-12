@@ -6,7 +6,7 @@ export async function signIn(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 

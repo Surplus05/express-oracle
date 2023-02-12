@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { StyledInnerLayoutWrapper } from "../../common/style";
 import ControlPanel from "./ControlPanel";
@@ -17,10 +18,14 @@ const StyledHeaderWrapper = styled.div`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <StyledHeaderWrapper>
       <StyledInnerLayoutWrapper>
         <img
+          onClick={() => {
+            navigate(`${process.env.PUBLIC_URL}/main?page=1`);
+          }}
           style={{
             margin: "0.5em 0",
             height: "calc(100% - 1em)",

@@ -30,7 +30,7 @@ const StyledSearchBarInput = styled.input`
 const SearchBar = () => {
   return (
     <StyledSearchBarWrapper>
-      <StyledSearchBarInput placeholder="제목으로 검색하세요"></StyledSearchBarInput>
+      <StyledSearchBarInput placeholder="제목으로 검색하세요 (미구현)"></StyledSearchBarInput>
       <i
         className="fa-solid fa-magnifying-glass"
         style={{

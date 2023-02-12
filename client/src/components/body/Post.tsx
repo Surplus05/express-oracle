@@ -17,6 +17,8 @@ const StyledPostWrapper = styled.div`
   border-radius: var(--border--radius);
   min-height: 3.36em;
   cursor: pointer;
+  transition: 0.3s;
+  margin: 0.5em;
   :hover {
     background-color: var(--color--main);
     color: #fff;

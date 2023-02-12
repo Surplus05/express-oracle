@@ -6,7 +6,7 @@ export async function socialInteraciton(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 
@@ -14,8 +14,7 @@ export async function socialInteraciton(
   const likeType = request.query.like === "true" ? "LIKES" : "DISLIKES";
 
   if (postId == null || likeType == null) {
-    response.status(404);
-    response.send();
+    response.sendStatus(404);
     return;
   }
 

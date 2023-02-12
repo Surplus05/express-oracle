@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import styled from "styled-components";
 import IconButton from "../common/IconButton";
 
+const POST_PER_PAGE = 15;
+
 const StyledPagingWrapper = styled.div`
   user-select: none;
   display: flex;
@@ -33,7 +35,7 @@ const Paging = ({
 
   const navigate = useNavigate();
 
-  const maxPage = Math.ceil(totalPosts / 24);
+  const maxPage = Math.ceil(totalPosts / POST_PER_PAGE);
   return (
     <StyledPagingWrapper>
       <div style={{ display: "flex" }}>

@@ -6,7 +6,7 @@ export async function checkDuplicate(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 
@@ -22,8 +22,7 @@ export async function checkDuplicate(
     columnName = "USERNAME";
     data = params.username;
   } else {
-    response.status(404);
-    response.send();
+    response.sendStatus(404);
     return;
   }
 
@@ -52,7 +51,7 @@ export async function signUp(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 

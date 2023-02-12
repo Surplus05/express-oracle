@@ -6,15 +6,13 @@ export async function deletePost(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 
-  console.log("test");
   let postId = Number(request.query.postId);
   if (postId == null) {
-    response.status(404);
-    response.send();
+    response.sendStatus(404);
     return;
   }
 

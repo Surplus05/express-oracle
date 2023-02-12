@@ -6,15 +6,14 @@ export async function getCommentList(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 
   const postId = Number(request.query.postId);
 
   if (postId == null) {
-    response.status(404);
-    response.send();
+    response.sendStatus(404);
     return;
   }
 
@@ -45,7 +44,7 @@ export async function writeComment(
   response: Response,
   oracledb: any,
   dbconfig: DBConfig,
-  whitelist: string[]
+  whitelist: string
 ) {
   response.header("Access-Control-Allow-Origin", whitelist);
 
