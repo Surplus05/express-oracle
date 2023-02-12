@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -33,9 +33,11 @@ const Body = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  if (Number(searchParams.get("page") == null)) {
-    navigate("/main?page=1");
-  }
+  useEffect(() => {
+    if (Number(searchParams.get("page") == null)) {
+      navigate("/main?page=1");
+    }
+  }, []);
 
   return (
     <StyledBodyWrapper>

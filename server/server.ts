@@ -13,6 +13,7 @@ const oracledb = require("oracledb");
 const whitelist = [
   "http://localhost:3000",
   "http://192.168.55.90:3000",
+  "http://1.251.1.56",
   "https://surplus05.github.io",
 ];
 
