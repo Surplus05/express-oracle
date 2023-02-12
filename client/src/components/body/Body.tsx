@@ -1,5 +1,6 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { StyledInnerLayoutWrapper } from "../../common/style";
 
@@ -29,6 +30,13 @@ const StyledBodyCommonAdsWrapper = styled.div`
 `;
 
 const Body = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  if (Number(searchParams.get("page") == null)) {
+    navigate("/main?page=1");
+  }
+
   return (
     <StyledBodyWrapper>
       <StyledInnerLayoutWrapper
