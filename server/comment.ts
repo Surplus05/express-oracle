@@ -5,11 +5,8 @@ export async function getCommentList(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const postId = Number(request.query.postId);
 
   if (postId == null) {
@@ -43,13 +40,9 @@ export async function writeComment(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
-  const data: Comment = JSON.parse(request.body);
-
+  const data: Comment = request.body;
   let connection;
   try {
     connection = await oracledb.getConnection(dbconfig);

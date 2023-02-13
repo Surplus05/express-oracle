@@ -5,11 +5,8 @@ export async function getPost(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const postId = Number(request.query.postId);
 
   if (postId == null) {

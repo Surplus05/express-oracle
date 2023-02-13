@@ -5,11 +5,8 @@ export async function signIn(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const data: SignInInfo = JSON.parse(request.body);
 
   let connection;

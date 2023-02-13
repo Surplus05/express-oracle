@@ -7,11 +7,8 @@ export async function getPostList(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const page = Number(request.query.page) || 1;
 
   let connection;

@@ -13,6 +13,7 @@ const oracledb = require("oracledb");
 const whitelist = [
   "http://localhost:3000",
   "http://192.168.55.90:3000",
+  "http://1.251.1.56:5000",
   "http://1.251.1.56",
   "https://surplus05.github.io",
 ];
@@ -30,6 +31,22 @@ try {
 }
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
+app.use(function (req, res, next) {
+  const origin = req.headers.origin as string;
+  if (whitelist.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else {
+    res.sendStatus(404);
+    return;
+  }
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+  next();
+});
+
 app.listen("5000", () => {
   console.log(`
   Server listening on port 5000
@@ -37,104 +54,50 @@ app.listen("5000", () => {
 });
 
 app.use(express.text());
+app.use(express.json());
 
 app.route("/post").get((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    getPostList(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  getPostList(request, response, oracledb, dbconfig);
 });
 
 app.route("/view").get((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    getPost(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  getPost(request, response, oracledb, dbconfig);
 });
 
 app.route("/social").get((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    socialInteraciton(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  socialInteraciton(request, response, oracledb, dbconfig);
 });
 
 app
   .route("/comments")
   .get((request: Request, response: Response) => {
-    const origin = request.headers.origin as string;
-    if (whitelist.includes(origin)) {
-      getCommentList(request, response, oracledb, dbconfig, origin);
-    } else {
-      response.sendStatus(404);
-    }
+    getCommentList(request, response, oracledb, dbconfig);
   })
   .post((request: Request, response: Response) => {
-    const origin = request.headers.origin as string;
-    if (whitelist.includes(origin)) {
-      writeComment(request, response, oracledb, dbconfig, origin);
-    } else {
-      response.sendStatus(404);
-    }
+    writeComment(request, response, oracledb, dbconfig);
   });
 
 app
   .route("/signup")
   .get((request: Request, response: Response) => {
-    const origin = request.headers.origin as string;
-    if (whitelist.includes(origin)) {
-      checkDuplicate(request, response, oracledb, dbconfig, origin);
-    } else {
-      response.sendStatus(404);
-    }
+    checkDuplicate(request, response, oracledb, dbconfig);
   })
   .post((request: Request, response: Response) => {
-    const origin = request.headers.origin as string;
-    if (whitelist.includes(origin)) {
-      signUp(request, response, oracledb, dbconfig, origin);
-    } else {
-      response.sendStatus(404);
-    }
+    signUp(request, response, oracledb, dbconfig);
   });
 
 app.route("/signin").post((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    signIn(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  signIn(request, response, oracledb, dbconfig);
 });
 
 app.route("/write").post((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    writePost(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  writePost(request, response, oracledb, dbconfig);
 });
 
 app.route("/edit").post((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    editPost(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  editPost(request, response, oracledb, dbconfig);
 });
 
 app.route("/delete").get((request: Request, response: Response) => {
-  const origin = request.headers.origin as string;
-  if (whitelist.includes(origin)) {
-    deletePost(request, response, oracledb, dbconfig, origin);
-  } else {
-    response.sendStatus(404);
-  }
+  deletePost(request, response, oracledb, dbconfig);
 });

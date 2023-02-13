@@ -5,11 +5,8 @@ export async function checkDuplicate(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const params: UserInfo = request.query;
 
   let columnName: string;
@@ -50,11 +47,8 @@ export async function signUp(
   request: Request,
   response: Response,
   oracledb: any,
-  dbconfig: DBConfig,
-  whitelist: string
+  dbconfig: DBConfig
 ) {
-  response.header("Access-Control-Allow-Origin", whitelist);
-
   const data: SignUpInfo = JSON.parse(request.body);
 
   let connection;

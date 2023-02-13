@@ -43,10 +43,10 @@ export async function checkDuplicate(column: string, data: string) {
 export async function signUp(data: SignUp) {
   return await axios.post(
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signup`,
-    JSON.stringify(data),
+    data,
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
@@ -55,10 +55,10 @@ export async function signUp(data: SignUp) {
 export async function signIn(data: SignIn) {
   return await axios.post(
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signin`,
-    JSON.stringify(data),
+    data,
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
@@ -67,10 +67,10 @@ export async function signIn(data: SignIn) {
 export async function writePost(data: WritePost) {
   return await axios.post(
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/write`,
-    JSON.stringify(data),
+    data,
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
@@ -79,10 +79,10 @@ export async function writePost(data: WritePost) {
 export async function editPost(data: EditPost) {
   return await axios.post(
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/edit`,
-    JSON.stringify(data),
+    data,
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
@@ -124,10 +124,10 @@ export async function getComments(postId: number) {
 export async function writeComment(data: WriteComment) {
   return await axios.post(
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/comments`,
-    JSON.stringify(data),
+    data,
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
