@@ -67,12 +67,28 @@ API Server 에 HTTPS 를 적용시켰으나 ERR_CERT_INVALID 오류가 계속해
 인증서를 받기위해 CertBot 으로 시도했으나 standalone, webroot 둘다 실패하며 인증서 발급을 받지 못했다.  
 Github Pages 말고 직접 배포하기로 했고, Nginx를 선택했다.  
 
-## 4. 마치며  
+# 4. Restful API
+Restful API 설계 시 URI로 Resource 를 명시하고, HTTP Method 를 통해 CRUD Operation을 적용해야 한다.  
+이 프로젝트에서는 Express사용과 배포경험에 초점을 맞추었기 때문에 복사 붙여넣기 편하게 Restful 하지 않게 구현하였다.  
+
+삭제하는 경우를 한 번 보자.  
+삭제시 요청 헤더는 다음과 같다.  
+```
+GET http://host/delete (x)
+```  
+URL 에는 동사(행위)가 오면 안되고, 명사(대상, Resource)을 명시해야 한다.  
+Restful 하게 바꾸어 보면
+```
+DELETE http://host/post (o)
+```  
+가 되어야 하는 것이다.  
+다음부터는 Restful 하게 API를 설계하자.  
+
+## 5. 마치며  
 얻어가는게 꽤 많았다.  
 개발부터 배포까지 기초적인 수준이지만 해보면서 전체적인 흐름을 알게 됐다.  
 다음에는 최초는 서버사이드에서 렌더링 한 결과를 보내주고 그 다음엔 클라이언트에서 렌더링해주는 방식으로 SSR, CSR(SPA) 의 장점을 합친 Next.js 를 이용해서 SSR 을 한번 해보고 싶다.  
 또, Top Loading Bar 도 한번 만들어보고 싶다.  
-![image](https://user-images.githubusercontent.com/104773096/218535282-dfa36230-eb38-4e29-907e-1fd47373a412.png)
 
 
 
