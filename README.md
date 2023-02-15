@@ -14,4 +14,4 @@ Routing 파일이 comment, post, user로 줄어들었다.
 또, body 에 transition 을 삭제했다.  
 ![image](https://user-images.githubusercontent.com/104773096/219139060-c5f17f0a-a65b-4389-85a8-1d36c8733813.png)
 아까보단 훨씬 낫다.  
-트리 쉐이킹같은 것도 해보려고 했으나 프로젝트가 워낙 간단해 큰 효과를 볼것 같지 않아 여기서 끝내도 될 것 같다.
+clinet 볼륨이 커지면 트리 쉐이킹이나 이미지 스프라이트 작업같은것도 해보고 싶다.  
