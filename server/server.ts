@@ -1,13 +1,14 @@
 import express, { Request, Response } from "express";
 import { getCommentList, writeComment } from "./comment";
-import { deletePost } from "./delete";
-import { editPost } from "./edit";
-import { getPostList } from "./post";
-import { signIn } from "./signin";
-import { checkDuplicate, signUp } from "./signup";
-import { socialInteraciton } from "./social";
-import { getPost } from "./view";
-import { writePost } from "./write";
+import {
+  deletePost,
+  editPost,
+  getPost,
+  getPostList,
+  socialInteraciton,
+  writePost,
+} from "./post";
+import { checkDuplicate, signIn, signUp } from "./user";
 const app = express();
 const oracledb = require("oracledb");
 const whitelist = [
@@ -40,7 +41,7 @@ app.use(function (req, res, next) {
     return;
   }
   res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
   next();
 });
 
@@ -53,17 +54,33 @@ app.listen("5000", () => {
 app.use(express.text());
 app.use(express.json());
 
-app.route("/post").get((request: Request, response: Response) => {
-  getPostList(request, response, oracledb, dbconfig);
-});
-
-app.route("/view").get((request: Request, response: Response) => {
-  getPost(request, response, oracledb, dbconfig);
-});
-
-app.route("/social").get((request: Request, response: Response) => {
-  socialInteraciton(request, response, oracledb, dbconfig);
-});
+app
+  .route("/post")
+  .get((request: Request, response: Response) => {
+    if (request.query.type === "list")
+      getPostList(request, response, oracledb, dbconfig);
+    else if (request.query.type === "detail")
+      getPost(request, response, oracledb, dbconfig);
+    else response.sendStatus(404);
+  })
+  .post((request: Request, response: Response) => {
+    if (request.body.type === "write")
+      writePost(request.body.data, response, oracledb, dbconfig);
+    else if (request.body.type === "edit")
+      editPost(request.body.data, response, oracledb, dbconfig);
+    else if (request.body.type === "delete")
+      deletePost(request.body.postId, response, oracledb, dbconfig);
+    else response.sendStatus(404);
+  })
+  .put((request: Request, response: Response) => {
+    socialInteraciton(
+      request.body.postId,
+      request.body.like,
+      response,
+      oracledb,
+      dbconfig
+    );
+  });
 
 app
   .route("/comments")
@@ -75,26 +92,20 @@ app
   });
 
 app
-  .route("/signup")
+  .route("/user")
   .get((request: Request, response: Response) => {
     checkDuplicate(request, response, oracledb, dbconfig);
   })
   .post((request: Request, response: Response) => {
-    signUp(request, response, oracledb, dbconfig);
+    if (request.body.type === "signIn")
+      signIn(request.body.data, response, oracledb, dbconfig);
+    else if (request.body.type === "signUp")
+      signUp(request.body.data, response, oracledb, dbconfig);
+    else response.sendStatus(400);
   });
 
-app.route("/signin").post((request: Request, response: Response) => {
-  signIn(request, response, oracledb, dbconfig);
-});
+// 로그인 은 유저 정보를 받아오는 거니 GET아닌가 싶었으나 실제 로그인 구현시에는 세션이나 쿠키를 Response하는데, 이 세션, 쿠키들 (Resource) 를 생성한다는 의미로 POST 를 사용하면 Restful 하다고 한다.
 
-app.route("/write").post((request: Request, response: Response) => {
-  writePost(request, response, oracledb, dbconfig);
-});
+// Delete Post의 경우, postId만 queryParam으로 보내면 다른 사용자들도 postId만 알면 삭제할수 있으므로 post를 사용함
 
-app.route("/edit").post((request: Request, response: Response) => {
-  editPost(request, response, oracledb, dbconfig);
-});
-
-app.route("/delete").get((request: Request, response: Response) => {
-  deletePost(request, response, oracledb, dbconfig);
-});
+// 실제 서버에서는 Get 은 가져온다는 개념이고, Post 는 수행한다는 개념으로 두개만 사용하는 경우가 많다고 한다.

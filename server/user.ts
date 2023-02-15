@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DBConfig, SignUpInfo, UserInfo } from "./types";
+import { DBConfig, SignInInfo, SignUpInfo, UserInfo } from "./types";
 
 export async function checkDuplicate(
   request: Request,
@@ -44,13 +44,11 @@ export async function checkDuplicate(
 }
 
 export async function signUp(
-  request: Request,
+  data: SignUpInfo,
   response: Response,
   oracledb: any,
   dbconfig: DBConfig
 ) {
-  const data: SignUpInfo = JSON.parse(request.body);
-
   let connection;
   try {
     connection = await oracledb.getConnection(dbconfig);
@@ -59,6 +57,37 @@ export async function signUp(
     );
     await connection.commit();
     response.send(true);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
+
+export async function signIn(
+  data: SignInInfo,
+  response: Response,
+  oracledb: any,
+  dbconfig: DBConfig
+) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
+    let userInfo = await connection.execute(
+      `SELECT USER_INFO.USER_ID FROM USER_INFO WHERE MAIL='${data.mail}' AND PW = '${data.pw}'`
+    );
+    if (userInfo.rows.length) {
+      response.send(userInfo);
+    } else {
+      response.status(401);
+      response.send();
+    }
   } catch (error) {
     console.log(error);
   } finally {

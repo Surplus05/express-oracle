@@ -12,6 +12,7 @@ export async function getPostList(page: number) {
     `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
     {
       params: {
+        type: "list",
         page,
       },
     }
@@ -20,9 +21,10 @@ export async function getPostList(page: number) {
 
 export async function getPost(postId: number) {
   return await axios.get(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/view`,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
     {
       params: {
+        type: "detail",
         postId,
       },
     }
@@ -31,7 +33,7 @@ export async function getPost(postId: number) {
 
 export async function checkDuplicate(column: string, data: string) {
   return await axios.get(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signup`,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/user`,
     {
       params: {
         [`${column}`]: data,
@@ -42,8 +44,11 @@ export async function checkDuplicate(column: string, data: string) {
 
 export async function signUp(data: SignUp) {
   return await axios.post(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signup`,
-    data,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/user`,
+    {
+      type: "signUp",
+      data,
+    },
     {
       headers: {
         "Content-Type": "application/json",
@@ -54,8 +59,11 @@ export async function signUp(data: SignUp) {
 
 export async function signIn(data: SignIn) {
   return await axios.post(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/signin`,
-    data,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/user`,
+    {
+      type: "signIn",
+      data,
+    },
     {
       headers: {
         "Content-Type": "application/json",
@@ -66,8 +74,11 @@ export async function signIn(data: SignIn) {
 
 export async function writePost(data: WritePost) {
   return await axios.post(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/write`,
-    data,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
+    {
+      type: "write",
+      data,
+    },
     {
       headers: {
         "Content-Type": "application/json",
@@ -78,8 +89,11 @@ export async function writePost(data: WritePost) {
 
 export async function editPost(data: EditPost) {
   return await axios.post(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/edit`,
-    data,
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
+    {
+      type: "edit",
+      data,
+    },
     {
       headers: {
         "Content-Type": "application/json",
@@ -89,23 +103,30 @@ export async function editPost(data: EditPost) {
 }
 
 export async function deletePost(postId: number) {
-  return await axios.get(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/delete`,
+  return await axios.post(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
     {
-      params: {
-        postId,
+      type: "delete",
+      postId,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
       },
     }
   );
 }
 
 export async function postSocial(postId: number, like: boolean) {
-  return await axios.get(
-    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/social`,
+  return await axios.put(
+    `http://${process.env.REACT_APP_EXPRESS_ADDRESS}:5000/post`,
     {
-      params: {
-        postId,
-        like,
+      postId,
+      like,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
       },
     }
   );
