@@ -14,11 +14,12 @@ const StyledButton = styled.button<ButtonColorProps>`
   border: 1px solid
     ${({ isColor }) =>
       isColor ? "transparent" : "var(--color--gray-outFoucs)"};
-  padding: 0.375em 0.625em;
+  padding: 0.375em 0.875em;
   line-height: 1.6em;
   cursor: pointer;
   user-select: none;
   margin-left: 1em;
+  font-family: "KoPubWorldDotum";
 `;
 
 const Button = ({
