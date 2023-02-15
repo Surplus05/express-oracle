@@ -32,9 +32,7 @@ const Header = () => {
             userSelect: "none",
             cursor: "pointer",
           }}
-          src={
-            "https://pngimage.net/wp-content/uploads/2019/05/instagram-logo-black-png-transparent-background-.png"
-          }
+          src={"/logo.png"}
           alt="logo"
         ></img>
         <SearchBar></SearchBar>

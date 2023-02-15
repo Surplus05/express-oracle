@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`body {
   background-color: var(--color--background);
   margin: 0;
   padding: 0;
-  transition: 0.1s;
   overflow-x: hidden;
   box-sizing: border-box;
   font-family: 'KoPubWorldDotum';

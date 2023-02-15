@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "KoPubWorldDotum";
+  font-weight: 500;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumMedium.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumMedium.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumMedium.ttf")
+      format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KoPubWorldDotum";
+  font-weight: 700;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumBold.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumBold.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/kopus/KoPubWorldDotumBold.ttf")
+      format("truetype");
+  font-display: swap;
+}
