@@ -37,6 +37,7 @@ const Body = () => {
     if (Number(searchParams.get("page") == null)) {
       navigate("/main?page=1");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import MobileMenu from "./MobileMenu";
 
 interface MenuLineProps {
@@ -9,23 +9,6 @@ interface MenuLineProps {
 interface MobileMenuProps {
   isActive: boolean;
 }
-
-const MobileMenuFadeIn = keyframes`
-  0% {
-    transform: translate(100%, 0%);
-  }
-  100% {
-    transform: translate(0%, 0%);
-  }
-`;
-const MobileMenuFadeOut = keyframes`
-  0% {
-    transform: translate(0%, 0%);
-  }
-  100% {
-    transform: translate(100%, 0%);
-  }
-`;
 
 const StyledMobileMenu = styled.div<MobileMenuProps>`
   position: absolute;
