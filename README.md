@@ -7,7 +7,7 @@ Oracle Sql Developer 22.2.1
   
 ## API Server
 ExpressJS 4.18.2  
-Node-OracleDB 5.5 (https://node-oracledb.readthedocs.io/en/latest/index.html)  
+[Node-OracleDB 5.5](https://node-oracledb.readthedocs.io/en/latest/index.html)  
 Oracle Instant Client 21.9  
 TS-Node 10.9.1  
 Nodemon 2.0.20  
@@ -85,7 +85,7 @@ DELETE http://host/post (o)
 어느정도 익숙해 졌으니 다음부터는 Restful 하게 API를 설계하자.  
 
 # 5. 성능 최적화와 Restful API  
-다른 branch 로 분리해 성능 최적화와 Restful API 로 리팩토링을 해 보자.  
+[Refactoring Branch](https://github.com/Surplus05/express-oracle/tree/Refactoring) 에서 Refactoring 을 진행하였다.  
 
 # 6. 마치며  
 얻어가는게 꽤 많았다.  
