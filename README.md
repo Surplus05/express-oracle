@@ -21,7 +21,7 @@ Axois 1.3.2
 Styled-Components 5.3.6  
   
 		
-# 2. DB 스키마
+# 2. 테이블
 ![image](https://user-images.githubusercontent.com/104773096/218503463-0b8147eb-3e3d-42e2-ad36-a71686a139c1.png)
 				
 # 3. 구현중 맞이한 문제점들
